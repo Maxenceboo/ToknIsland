@@ -1,0 +1,26 @@
+name: Administration
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  docs:
+    name: Docs sanity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check required files
+        shell: bash
+        run: |
+          test -f README.md
+          test -f CONTRIBUTING.md
+          test -f SECURITY.md
+          test -f docs/ARCHITECTURE.md
+          test -f docs/ROADMAP.md
+          test -f docs/BACKLOG.md
+
