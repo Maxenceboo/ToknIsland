@@ -1,5 +1,6 @@
 mod commands;
 mod core;
+mod persistence;
 mod runner;
 
 pub fn run() {

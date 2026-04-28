@@ -9,12 +9,22 @@ import {
   Terminal,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { metrics, sessions } from "./cockpitData";
+import {
+  cockpitMetrics,
+  initialCockpitState,
+  openPreviewProject,
+  projectLabel,
+  sessionSummaries,
+} from "./cockpitState";
 import { healthcheck, type HealthcheckResponse } from "../lib/tauri";
 
 export function App() {
   const [health, setHealth] = useState<HealthcheckResponse | null>(null);
   const [healthError, setHealthError] = useState<string | null>(null);
+  const [cockpitState, setCockpitState] = useState(initialCockpitState);
+
+  const sessions = sessionSummaries(cockpitState);
+  const metrics = cockpitMetrics(cockpitState);
 
   useEffect(() => {
     healthcheck()
@@ -35,7 +45,7 @@ export function App() {
           </div>
         </div>
 
-        <button className="primary-action" type="button">
+        <button className="primary-action" type="button" onClick={() => setCockpitState(openPreviewProject)}>
           <FolderOpen size={17} />
           Open project
         </button>
@@ -57,7 +67,7 @@ export function App() {
       <section className="workspace">
         <header className="topbar">
           <div>
-            <span className="eyebrow">No project selected</span>
+            <span className="eyebrow">{projectLabel(cockpitState.project)}</span>
             <h2>Cockpit</h2>
           </div>
           <div className="toolbar">
@@ -89,7 +99,7 @@ export function App() {
           </div>
           <pre>
 {`$ ToknIsland runner
-Waiting for a project and agent command.
+${cockpitState.project ? `Project loaded: ${cockpitState.project.name}` : "Waiting for a project and agent command."}
 Backend: ${health ? `${health.status} (${health.app}, ${health.runtime})` : healthError ? `offline: ${healthError}` : "checking..."}`}
           </pre>
         </section>
@@ -111,7 +121,7 @@ Backend: ${health ? `${health.status} (${health.app}, ${health.runtime})` : heal
           <div className="detail-row">
             <Activity size={17} />
             <span>Runner</span>
-            <strong>idle</strong>
+            <strong>{cockpitState.runnerStatus}</strong>
           </div>
         </section>
 
