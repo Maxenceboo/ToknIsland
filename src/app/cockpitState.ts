@@ -20,19 +20,32 @@ export type ImportedProject = {
   agents: AgentWorkspace[];
 };
 
+export type ExternalAgentSession = {
+  id: string;
+  projectPath: string;
+  agentName: string;
+  terminal: string;
+  pid: number;
+  status: "detected" | "attached";
+};
+
 export type RunnerStatus = "idle" | "ready" | "running" | "stopped";
 
 export type CockpitState = {
+  importedProjects: ImportedProject[];
   project: ImportedProject | null;
   activeAgentId: string | null;
   activeConversationId: string | null;
+  externalSessions: ExternalAgentSession[];
   runnerStatus: RunnerStatus;
 };
 
 export const initialCockpitState: CockpitState = {
+  importedProjects: [],
   project: null,
   activeAgentId: null,
   activeConversationId: null,
+  externalSessions: [],
   runnerStatus: "idle",
 };
 
@@ -64,12 +77,23 @@ export const previewProject: ImportedProject = {
   ],
 };
 
+export const previewExternalSession: ExternalAgentSession = {
+  id: "external-codex-terminal",
+  projectPath: previewProject.path,
+  agentName: "Codex",
+  terminal: "PowerShell",
+  pid: 4242,
+  status: "detected",
+};
+
 export function openPreviewProject(state: CockpitState): CockpitState {
+  const importedProjects = ensureImportedProject(state.importedProjects, previewProject);
   const firstAgent = previewProject.agents[0];
   const firstConversation = firstAgent?.conversations[0];
 
   return {
     ...state,
+    importedProjects,
     project: previewProject,
     activeAgentId: firstAgent?.id ?? null,
     activeConversationId: firstConversation?.id ?? null,
@@ -77,8 +101,49 @@ export function openPreviewProject(state: CockpitState): CockpitState {
   };
 }
 
+export function ensureImportedProject(projects: ImportedProject[], project: ImportedProject) {
+  if (projects.some((importedProject) => importedProject.path === project.path)) {
+    return projects;
+  }
+
+  return [...projects, project];
+}
+
+export function detectPreviewExternalSessions(state: CockpitState): CockpitState {
+  if (state.externalSessions.some((session) => session.id === previewExternalSession.id)) {
+    return state;
+  }
+
+  return {
+    ...state,
+    externalSessions: [...state.externalSessions, previewExternalSession],
+  };
+}
+
+export function attachExternalSession(state: CockpitState, sessionId: string): CockpitState {
+  const session = state.externalSessions.find((externalSession) => externalSession.id === sessionId);
+
+  if (!session) {
+    return state;
+  }
+
+  const nextState = openPreviewProject(state);
+
+  return {
+    ...nextState,
+    externalSessions: nextState.externalSessions.map((externalSession) =>
+      externalSession.id === sessionId ? { ...externalSession, status: "attached" } : externalSession,
+    ),
+    runnerStatus: "running",
+  };
+}
+
 export function projectLabel(project: ImportedProject | null) {
   return project ? project.path : "No project selected";
+}
+
+export function importedProjectCount(state: CockpitState) {
+  return state.importedProjects.length;
 }
 
 export function agentWorkspaces(state: CockpitState) {

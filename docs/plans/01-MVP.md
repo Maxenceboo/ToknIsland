@@ -11,6 +11,8 @@ Le MVP ne cherche pas a tout supporter. Il prouve le coeur du produit : piloter 
 ### Projet
 
 - Importer un ou plusieurs dossiers projet locaux.
+- Garder une bibliotheque locale des projets deja importes.
+- Eviter les doublons si un projet est importe plusieurs fois.
 - Creer `.toknisland/` si absent.
 - Afficher le projet courant.
 - Afficher les IA configurees ou detectees pour le projet.
@@ -20,6 +22,8 @@ Le MVP ne cherche pas a tout supporter. Il prouve le coeur du produit : piloter 
 
 - Configurer une commande agent simple.
 - Lancer l'agent dans un PTY.
+- Detecter une IA deja ouverte dans un autre terminal local.
+- Attacher une session externe detectee au projet correspondant.
 - Afficher la sortie en temps reel.
 - Envoyer une interruption utilisateur.
 - Marquer la session comme terminee, interrompue ou echouee.

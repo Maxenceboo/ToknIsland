@@ -162,10 +162,26 @@ Ouvrir :
 - macOS : iTerm2 ou Terminal.
 - Linux : terminal disponible.
 
+## External Session Discovery
+
+Responsabilites :
+
+- scanner les processus locaux ;
+- detecter les CLI d'IA connues ;
+- recuperer le dossier de travail quand l'OS le permet ;
+- associer la session au projet importe par chemin ;
+- eviter les doublons de sessions detectees ;
+- permettre d'attacher la session detectee a une conversation.
+
+Contraintes :
+
+- aucune donnee envoyee au reseau ;
+- ne pas logger de secrets ou prompts ;
+- traiter les commandes/processus comme donnees sensibles dans les exports.
+
 ## Tests
 
 - Tests unitaires Rust pour paths, persistence, parser.
 - Tests integration pour runner avec commande de test.
 - Tests frontend pour composants critiques.
 - Tests manuels cross-platform pour overlay.
-

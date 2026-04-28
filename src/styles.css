@@ -98,7 +98,10 @@ small,
 }
 
 .primary-action,
+.secondary-action,
 .session-row,
+.project-row,
+.external-row,
 .icon-button {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
@@ -115,6 +118,16 @@ small,
   height: 42px;
   background: rgba(73, 214, 158, 0.16);
   color: #aaf7d3;
+}
+
+.secondary-action {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  margin-top: 12px;
+  color: #cbd6e2;
 }
 
 .stack {
@@ -137,6 +150,17 @@ small,
   gap: 10px;
   width: 100%;
   padding: 12px;
+  text-align: left;
+}
+
+.project-row,
+.external-row {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 8px;
+  padding: 11px 12px;
   text-align: left;
 }
 

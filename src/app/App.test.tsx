@@ -9,7 +9,7 @@ describe("App", () => {
 
     expect(screen.getByRole("heading", { name: "ToknIsland" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Cockpit" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Open project" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Import project" })).toBeInTheDocument();
     expect(screen.getByText("Runner output")).toBeInTheDocument();
     expect(await screen.findByText(/Backend: preview/)).toBeInTheDocument();
   });
@@ -19,10 +19,25 @@ describe("App", () => {
 
     render(<App />);
 
-    await user.click(screen.getByRole("button", { name: "Open project" }));
+    await user.click(screen.getByRole("button", { name: "Import project" }));
 
     expect(screen.getByText("C:\\Users\\maxen\\Documents\\ToknIsland")).toBeInTheDocument();
     expect(screen.getByText(/Project loaded: ToknIsland/)).toBeInTheDocument();
     expect(screen.getByText("ready")).toBeInTheDocument();
+  });
+
+  it("detects and attaches an external terminal session", async () => {
+    const user = userEvent.setup();
+
+    render(<App />);
+
+    await user.click(screen.getByRole("button", { name: "Detect sessions" }));
+
+    expect(screen.getByText("PowerShell · pid 4242 · detected")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Attach Codex session from PowerShell" }));
+
+    expect(screen.getByText("PowerShell · pid 4242 · attached")).toBeInTheDocument();
+    expect(screen.getByText("running")).toBeInTheDocument();
   });
 });

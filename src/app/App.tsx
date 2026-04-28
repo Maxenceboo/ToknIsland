@@ -11,8 +11,11 @@ import {
 import { useEffect, useState } from "react";
 import {
   activeConversation,
+  attachExternalSession,
   agentWorkspaces,
   cockpitMetrics,
+  detectPreviewExternalSessions,
+  importedProjectCount,
   initialCockpitState,
   openPreviewProject,
   projectLabel,
@@ -49,10 +52,22 @@ export function App() {
 
         <button className="primary-action" type="button" onClick={() => setCockpitState(openPreviewProject)}>
           <FolderOpen size={17} />
-          Open project
+          Import project
         </button>
 
         <section className="stack">
+          <div className="section-title">Imported projects</div>
+          {cockpitState.importedProjects.length === 0 ? (
+            <div className="empty-list">No imported project yet.</div>
+          ) : (
+            cockpitState.importedProjects.map((project) => (
+              <button className="project-row" key={project.path} type="button">
+                <strong>{project.name}</strong>
+                <small>{project.agents.length} agents</small>
+              </button>
+            ))
+          )}
+
           <div className="section-title">Agents & conversations</div>
           {agents.length === 0 ? (
             <div className="empty-list">Import a project to list agents.</div>
@@ -140,6 +155,36 @@ Backend: ${health ? `${health.status} (${health.app}, ${health.runtime})` : heal
             <span>Runner</span>
             <strong>{cockpitState.runnerStatus}</strong>
           </div>
+          <div className="detail-row">
+            <FolderOpen size={17} />
+            <span>Imported projects</span>
+            <strong>{importedProjectCount(cockpitState)}</strong>
+          </div>
+        </section>
+
+        <section>
+          <div className="section-title">External terminals</div>
+          <button className="secondary-action" type="button" onClick={() => setCockpitState(detectPreviewExternalSessions)}>
+            Detect sessions
+          </button>
+          {cockpitState.externalSessions.length === 0 ? (
+            <div className="empty-list">No external agent detected.</div>
+          ) : (
+            cockpitState.externalSessions.map((session) => (
+              <button
+                className="external-row"
+                key={session.id}
+                type="button"
+                aria-label={`Attach ${session.agentName} session from ${session.terminal}`}
+                onClick={() => setCockpitState((state) => attachExternalSession(state, session.id))}
+              >
+                <strong>{session.agentName}</strong>
+                <small>
+                  {session.terminal} · pid {session.pid} · {session.status}
+                </small>
+              </button>
+            ))
+          )}
         </section>
 
         <section>

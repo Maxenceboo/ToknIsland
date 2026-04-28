@@ -13,7 +13,7 @@ Responsable de l'execution des agents IA via `portable-pty`.
 
 ### Persistence
 
-Responsable du dossier `.toknisland/` dans chaque projet ouvert.
+Responsable de la bibliotheque locale des projets importes et du dossier `.toknisland/` dans chaque projet ouvert.
 
 Structure cible :
 
@@ -29,13 +29,32 @@ Structure cible :
 Le modele logique suit :
 
 ```text
-Imported project
-  Agent workspace
-    Conversation/thread
-      JSONL events
+ToknIsland local library
+  Imported project
+    Agent workspace
+      Conversation/thread
+        JSONL events
 ```
 
 Un meme projet peut donc contenir plusieurs IA, et chaque IA peut posseder plusieurs conversations.
+
+Un projet importe une fois reste connu par ToknIsland. Si l'utilisateur tente de reimporter le meme chemin, l'app selectionne le projet existant au lieu de creer un doublon.
+
+### External Session Discovery
+
+ToknIsland doit detecter les agents IA deja ouverts dans d'autres terminaux locaux.
+
+Le flux cible :
+
+```text
+Scan local processes
+  detect AI CLI command
+  infer project cwd
+  match imported project by path
+  attach or import conversation
+```
+
+La detection ne doit pas envoyer de donnees a un serveur. Elle lit uniquement l'etat local de la machine, avec prudence sur les chemins, commandes et logs sensibles.
 
 ### Overlay
 
