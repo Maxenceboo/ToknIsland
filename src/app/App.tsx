@@ -9,19 +9,8 @@ import {
   Terminal,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { metrics, sessions } from "./cockpitData";
 import { healthcheck, type HealthcheckResponse } from "../lib/tauri";
-
-const sessions = [
-  { id: "local-draft", agent: "Codex", status: "Idle", tokens: "0" },
-  { id: "runner-plan", agent: "Claude", status: "Planned", tokens: "0" },
-  { id: "analytics", agent: "Custom", status: "Backlog", tokens: "0" },
-];
-
-const metrics = [
-  { label: "Active agents", value: "0" },
-  { label: "Saved threads", value: "0" },
-  { label: "Token cost", value: "$0.00" },
-];
 
 export function App() {
   const [health, setHealth] = useState<HealthcheckResponse | null>(null);

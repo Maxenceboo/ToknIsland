@@ -16,3 +16,17 @@ pub fn healthcheck() -> HealthcheckResponse {
         local_first: true,
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::healthcheck;
+
+    #[test]
+    fn healthcheck_reports_local_first_app() {
+        let response = healthcheck();
+
+        assert_eq!(response.status, "ok");
+        assert_eq!(response.app, "ToknIsland");
+        assert!(response.local_first);
+    }
+}

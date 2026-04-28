@@ -55,6 +55,19 @@ Build the frontend:
 npm run build
 ```
 
+Run frontend unit tests:
+
+```powershell
+npm test
+```
+
+Run Rust unit tests after installing Rust:
+
+```powershell
+cd src-tauri
+cargo test
+```
+
 ## Documents utiles
 
 - [Vision produit](docs/PRODUCT_VISION.md)
