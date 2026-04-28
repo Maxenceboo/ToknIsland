@@ -1,0 +1,24 @@
+name: Branch Policy
+
+on:
+  pull_request:
+
+jobs:
+  branch-name:
+    name: Branch name
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate branch prefix
+        shell: bash
+        run: |
+          branch="${{ github.head_ref }}"
+          pattern='^(feature|fix|docs|chore|release)/[a-z0-9][a-z0-9._-]*$'
+
+          if [[ "$branch" =~ $pattern ]]; then
+            echo "Branch name ok: $branch"
+            exit 0
+          fi
+
+          echo "Invalid branch name: $branch"
+          echo "Expected: feature/*, fix/*, docs/*, chore/*, or release/*"
+          exit 1

@@ -30,6 +30,7 @@ Le code applicatif Tauri/Rust/React n'est pas encore initialise dans ce repo.
 - [Roadmap](docs/ROADMAP.md)
 - [Backlog](docs/BACKLOG.md)
 - [Plans d'execution](docs/plans/INDEX.md)
+- [Strategie de branches](docs/BRANCHING.md)
 - [Conventions](docs/CONVENTIONS.md)
 - [Securite et privacy](docs/SECURITY_PRIVACY.md)
 - [Decisions d'architecture](docs/adr/0001-local-first-tauri-rust.md)

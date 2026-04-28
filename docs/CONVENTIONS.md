@@ -32,6 +32,18 @@ docs(architecture): add runner module overview
 feat(runner): stream pty output to frontend
 ```
 
+## Branches
+
+Voir [BRANCHING.md](BRANCHING.md).
+
+Prefixes autorises :
+
+- `feature/*`
+- `fix/*`
+- `docs/*`
+- `chore/*`
+- `release/*`
+
 ## ADR
 
 Toute decision structurante va dans `docs/adr/`.
@@ -42,4 +54,3 @@ Format :
 - decision ;
 - consequences ;
 - alternatives considerees.
-
