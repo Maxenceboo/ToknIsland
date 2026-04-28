@@ -14,6 +14,7 @@ describe("App", () => {
     expect(screen.getByRole("heading", { name: "ToknIsland" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Cockpit" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Import project" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Active context")).toBeInTheDocument();
     expect(screen.getByText("Runner output")).toBeInTheDocument();
     expect(await screen.findByText(/Backend: preview/)).toBeInTheDocument();
   });
@@ -28,8 +29,9 @@ describe("App", () => {
     expect(screen.getByText("C:\\Users\\maxen\\Documents\\ToknIsland")).toBeInTheDocument();
     expect(screen.getByText("Project tree")).toBeInTheDocument();
     expect(screen.getAllByText("Scaffold setup.jsonl").length).toBeGreaterThan(0);
+    expect(screen.getByText("browser-preview")).toBeInTheDocument();
     expect(screen.getByText(/Project loaded: ToknIsland/)).toBeInTheDocument();
-    expect(screen.getByText("ready")).toBeInTheDocument();
+    expect(screen.getAllByText("ready").length).toBeGreaterThan(0);
   });
 
   it("selects a thread file from the project tree", async () => {
@@ -72,6 +74,6 @@ describe("App", () => {
     await user.click(screen.getByRole("button", { name: "Attach Codex session from PowerShell" }));
 
     expect(screen.getByText("PowerShell | pid 4242 | attached")).toBeInTheDocument();
-    expect(screen.getByText("running")).toBeInTheDocument();
+    expect(screen.getAllByText("running").length).toBeGreaterThan(0);
   });
 });

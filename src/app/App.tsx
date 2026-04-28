@@ -134,6 +134,26 @@ export function App() {
           </div>
         </header>
 
+        <section className="context-strip" aria-label="Active context">
+          <div className="context-main">
+            <span className="context-node">
+              <FolderOpen size={16} />
+              {cockpitState.project?.name ?? "No project"}
+            </span>
+            <span className="context-separator">/</span>
+            <span className="context-node">{currentAgent?.name ?? "No IA"}</span>
+            <span className="context-separator">/</span>
+            <span className="context-node">
+              <FileText size={15} />
+              {currentConversation ? `${currentConversation.title}.jsonl` : "No thread"}
+            </span>
+          </div>
+          <div className="context-badges">
+            <span className="mini-badge">{cockpitState.runnerStatus}</span>
+            <span className="mini-badge">{health?.runtime ?? "checking"}</span>
+          </div>
+        </section>
+
         <div className="metrics">
           {metrics.map((metric) => (
             <div className="metric" key={metric.label}>
@@ -214,6 +234,7 @@ Backend: ${health ? `${health.status} (${health.app}, ${health.runtime})` : heal
 
         <section>
           <div className="section-title">External terminals</div>
+          <div className="subtle-note">Detected automatically on startup.</div>
           {cockpitState.externalSessions.length === 0 ? (
             <div className="empty-list">No external agent detected.</div>
           ) : (
