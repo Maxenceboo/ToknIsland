@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   activeConversation,
+  activeAgent,
   attachExternalSession,
   agentWorkspaces,
   cockpitMetrics,
@@ -12,6 +13,7 @@ import {
   openPreviewProject,
   previewProject,
   projectLabel,
+  selectConversation,
 } from "./cockpitState";
 
 describe("cockpit state", () => {
@@ -64,5 +66,14 @@ describe("cockpit state", () => {
     expect(attached.runnerStatus).toBe("running");
     expect(attached.project?.path).toBe(previewProject.path);
     expect(attached.externalSessions[0]).toMatchObject({ status: "attached" });
+  });
+
+  it("selects a conversation inside an agent folder", () => {
+    const state = openPreviewProject(initialCockpitState);
+    const selected = selectConversation(state, "codex", "codex-tests");
+
+    expect(activeAgent(selected)).toMatchObject({ name: "Codex" });
+    expect(activeConversation(selected)).toMatchObject({ title: "Unit tests", status: "Completed" });
+    expect(selected.activeConversationId).toBe("codex-tests");
   });
 });

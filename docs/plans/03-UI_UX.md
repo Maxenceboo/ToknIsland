@@ -10,9 +10,11 @@ Pas de landing page dans l'app. Le premier ecran doit etre le cockpit utilisable
 
 ### Sidebar gauche
 
-- Projet courant.
-- Sessions recentes.
-- Filtres : running, completed, failed.
+- Arborescence de projets importes.
+- Projet affiche comme dossier racine.
+- IA affichees comme sous-dossiers.
+- Conversations affichees comme fichiers `thread.jsonl`.
+- Selection d'un fichier thread pour changer la conversation active.
 - Bouton nouveau run.
 
 ### Zone centrale
@@ -99,4 +101,3 @@ Etat sans projet :
 - Failed.
 - No logs.
 - Permission/path error.
-

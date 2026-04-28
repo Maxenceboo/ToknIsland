@@ -12,6 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import {
   activeConversation,
+  activeAgent,
   attachExternalSession,
   agentWorkspaces,
   cockpitMetrics,
@@ -20,6 +21,7 @@ import {
   initialCockpitState,
   openPreviewProject,
   projectLabel,
+  selectConversation,
 } from "./cockpitState";
 import { healthcheck, type HealthcheckResponse } from "../lib/tauri";
 
@@ -30,6 +32,7 @@ export function App() {
 
   const agents = agentWorkspaces(cockpitState);
   const metrics = cockpitMetrics(cockpitState);
+  const currentAgent = activeAgent(cockpitState);
   const currentConversation = activeConversation(cockpitState);
 
   useEffect(() => {
@@ -84,7 +87,15 @@ export function App() {
 
                       <div className="tree-children thread-children">
                         {agent.conversations.map((conversation) => (
-                          <button className="tree-node thread-node" key={conversation.id} type="button">
+                          <button
+                            className={`tree-node thread-node ${
+                              cockpitState.activeConversationId === conversation.id ? "active" : ""
+                            }`}
+                            key={conversation.id}
+                            type="button"
+                            aria-label={`Select thread ${conversation.title}.jsonl`}
+                            onClick={() => setCockpitState((state) => selectConversation(state, agent.id, conversation.id))}
+                          >
                             <FileText size={14} />
                             <span>
                               <strong>{conversation.title}.jsonl</strong>
@@ -114,7 +125,15 @@ export function App() {
                   <small>{agent.conversations.length}</small>
                 </div>
                 {agent.conversations.map((conversation) => (
-                  <button className="session-row conversation-row" key={conversation.id} type="button">
+                  <button
+                    className={`session-row conversation-row ${
+                      cockpitState.activeConversationId === conversation.id ? "active" : ""
+                    }`}
+                    key={conversation.id}
+                    type="button"
+                    aria-label={`Select active thread ${conversation.title}`}
+                    onClick={() => setCockpitState((state) => selectConversation(state, agent.id, conversation.id))}
+                  >
                     <span>
                       <strong>{conversation.title}</strong>
                       <small>
@@ -193,6 +212,16 @@ Backend: ${health ? `${health.status} (${health.app}, ${health.runtime})` : heal
             <FolderOpen size={17} />
             <span>Imported projects</span>
             <strong>{importedProjectCount(cockpitState)}</strong>
+          </div>
+          <div className="detail-row">
+            <FileText size={17} />
+            <span>Active thread</span>
+            <strong>{currentConversation ? `${currentConversation.title}.jsonl` : "none"}</strong>
+          </div>
+          <div className="detail-row">
+            <FolderOpen size={17} />
+            <span>Active IA folder</span>
+            <strong>{currentAgent?.name ?? "none"}</strong>
           </div>
         </section>
 

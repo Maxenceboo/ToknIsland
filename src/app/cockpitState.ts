@@ -138,8 +138,32 @@ export function attachExternalSession(state: CockpitState, sessionId: string): C
   };
 }
 
+export function selectConversation(state: CockpitState, agentId: string, conversationId: string): CockpitState {
+  const agent = state.project?.agents.find((candidate) => candidate.id === agentId);
+  const conversation = agent?.conversations.find((candidate) => candidate.id === conversationId);
+
+  if (!agent || !conversation) {
+    return state;
+  }
+
+  return {
+    ...state,
+    activeAgentId: agent.id,
+    activeConversationId: conversation.id,
+    runnerStatus: conversation.status === "Ready" ? "ready" : state.runnerStatus,
+  };
+}
+
 export function projectLabel(project: ImportedProject | null) {
   return project ? project.path : "No project selected";
+}
+
+export function activeAgent(state: CockpitState) {
+  if (!state.project || !state.activeAgentId) {
+    return null;
+  }
+
+  return state.project.agents.find((agent) => agent.id === state.activeAgentId) ?? null;
 }
 
 export function importedProjectCount(state: CockpitState) {

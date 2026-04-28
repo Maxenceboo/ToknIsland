@@ -23,9 +23,22 @@ describe("App", () => {
 
     expect(screen.getByText("C:\\Users\\maxen\\Documents\\ToknIsland")).toBeInTheDocument();
     expect(screen.getByText("Project tree")).toBeInTheDocument();
-    expect(screen.getByText("Scaffold setup.jsonl")).toBeInTheDocument();
+    expect(screen.getAllByText("Scaffold setup.jsonl").length).toBeGreaterThan(0);
     expect(screen.getByText(/Project loaded: ToknIsland/)).toBeInTheDocument();
     expect(screen.getByText("ready")).toBeInTheDocument();
+  });
+
+  it("selects a thread file from the project tree", async () => {
+    const user = userEvent.setup();
+
+    render(<App />);
+
+    await user.click(screen.getByRole("button", { name: "Import project" }));
+    await user.click(screen.getByRole("button", { name: "Select thread Unit tests.jsonl" }));
+
+    expect(screen.getByText(/Active conversation: Unit tests/)).toBeInTheDocument();
+    expect(screen.getByText("Active IA folder")).toBeInTheDocument();
+    expect(screen.getAllByText("Codex").length).toBeGreaterThan(0);
   });
 
   it("detects and attaches an external terminal session", async () => {

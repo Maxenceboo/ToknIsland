@@ -218,6 +218,13 @@ small,
   color: #dfe6ee;
 }
 
+.thread-node.active,
+.conversation-row.active {
+  border: 1px solid rgba(73, 214, 158, 0.38);
+  background: rgba(73, 214, 158, 0.1);
+  color: #aaf7d3;
+}
+
 .tree-children {
   margin-left: 14px;
   border-left: 1px solid rgba(255, 255, 255, 0.1);
