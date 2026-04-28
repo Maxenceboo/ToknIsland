@@ -1,5 +1,7 @@
 # Roadmap
 
+Pour le decoupage operationnel, voir aussi [Plans d'execution](plans/INDEX.md).
+
 ## Phase 0 - Administration
 
 - Repo initialise.
@@ -36,4 +38,3 @@
 - Fenetre secondaire always-on-top.
 - Transparence.
 - Mode sans capture de focus.
-

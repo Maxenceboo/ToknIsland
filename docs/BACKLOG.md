@@ -1,5 +1,7 @@
 # Backlog
 
+Ce backlog suit les grandes lignes des [plans d'execution](plans/INDEX.md).
+
 ## Epic: Runner
 
 - [ ] Choisir l'API interne `AgentRunner`.
@@ -34,4 +36,3 @@
 - [ ] Ouvrir fichier dans VS Code.
 - [ ] Ouvrir terminal systeme au bon dossier.
 - [ ] Gerer erreurs lorsque l'app cible manque.
-
