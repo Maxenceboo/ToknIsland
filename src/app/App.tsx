@@ -14,7 +14,6 @@ import {
   activeConversation,
   activeAgent,
   attachExternalSession,
-  agentWorkspaces,
   cockpitMetrics,
   detectPreviewExternalSessions,
   importedProjectCount,
@@ -31,7 +30,6 @@ export function App() {
   const [healthError, setHealthError] = useState<string | null>(null);
   const [cockpitState, setCockpitState] = useState(() => detectPreviewExternalSessions(loadCockpitState()));
 
-  const agents = agentWorkspaces(cockpitState);
   const metrics = cockpitMetrics(cockpitState);
   const currentAgent = activeAgent(cockpitState);
   const currentConversation = activeConversation(cockpitState);
@@ -117,39 +115,6 @@ export function App() {
               </div>
             ))
           )}
-
-          <div className="section-title">Active agent folders</div>
-          {agents.length === 0 ? (
-            <div className="empty-list">Import a project to list agents.</div>
-          ) : (
-            agents.map((agent) => (
-              <div className="agent-group" key={agent.id}>
-                <div className="agent-heading">
-                  <span className={`agent-dot ${agent.accent}`} />
-                  <strong>{agent.name}</strong>
-                  <small>{agent.conversations.length}</small>
-                </div>
-                {agent.conversations.map((conversation) => (
-                  <button
-                    className={`session-row conversation-row ${
-                      cockpitState.activeConversationId === conversation.id ? "active" : ""
-                    }`}
-                    key={conversation.id}
-                    type="button"
-                    aria-label={`Select active thread ${conversation.title}`}
-                    onClick={() => setCockpitState((state) => selectConversation(state, agent.id, conversation.id))}
-                  >
-                    <span>
-                      <strong>{conversation.title}</strong>
-                      <small>
-                        {conversation.status} | {conversation.tokens}
-                      </small>
-                    </span>
-                  </button>
-                ))}
-              </div>
-            ))
-          )}
         </section>
       </aside>
 
@@ -218,16 +183,33 @@ Backend: ${health ? `${health.status} (${health.app}, ${health.runtime})` : heal
             <span>Imported projects</span>
             <strong>{importedProjectCount(cockpitState)}</strong>
           </div>
-          <div className="detail-row">
-            <FileText size={17} />
-            <span>Active thread</span>
-            <strong>{currentConversation ? `${currentConversation.title}.jsonl` : "none"}</strong>
-          </div>
-          <div className="detail-row">
-            <FolderOpen size={17} />
-            <span>Active IA folder</span>
-            <strong>{currentAgent?.name ?? "none"}</strong>
-          </div>
+        </section>
+
+        <section>
+          <div className="section-title">Selected thread</div>
+          {currentConversation && currentAgent ? (
+            <div className="thread-card">
+              <div className="thread-card-title">
+                <FileText size={18} />
+                <strong>{currentConversation.title}.jsonl</strong>
+              </div>
+              <div className="thread-meta">
+                <span>IA folder</span>
+                <strong>{currentAgent.name}</strong>
+              </div>
+              <div className="thread-meta">
+                <span>Status</span>
+                <strong>{currentConversation.status}</strong>
+              </div>
+              <div className="thread-meta">
+                <span>Tokens</span>
+                <strong>{currentConversation.tokens}</strong>
+              </div>
+              <code>.toknisland/threads/{currentConversation.id}.jsonl</code>
+            </div>
+          ) : (
+            <div className="empty-list">No thread selected.</div>
+          )}
         </section>
 
         <section>

@@ -41,7 +41,8 @@ describe("App", () => {
     await user.click(screen.getByRole("button", { name: "Select thread Unit tests.jsonl" }));
 
     expect(screen.getByText(/Active conversation: Unit tests/)).toBeInTheDocument();
-    expect(screen.getByText("Active IA folder")).toBeInTheDocument();
+    expect(screen.getByText("Selected thread")).toBeInTheDocument();
+    expect(screen.getByText("IA folder")).toBeInTheDocument();
     expect(screen.getAllByText("Codex").length).toBeGreaterThan(0);
   });
 
