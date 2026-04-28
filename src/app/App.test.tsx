@@ -1,9 +1,13 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { App } from "./App";
 
 describe("App", () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
+
   it("renders the cockpit shell", async () => {
     render(<App />);
 
@@ -39,6 +43,22 @@ describe("App", () => {
     expect(screen.getByText(/Active conversation: Unit tests/)).toBeInTheDocument();
     expect(screen.getByText("Active IA folder")).toBeInTheDocument();
     expect(screen.getAllByText("Codex").length).toBeGreaterThan(0);
+  });
+
+  it("restores imported projects without reimport after reload", async () => {
+    const user = userEvent.setup();
+
+    const { unmount } = render(<App />);
+
+    await user.click(screen.getByRole("button", { name: "Import project" }));
+    await user.click(screen.getByRole("button", { name: "Select thread Unit tests.jsonl" }));
+
+    unmount();
+    render(<App />);
+
+    expect(screen.getByText("Project tree")).toBeInTheDocument();
+    expect(screen.getAllByText("Unit tests.jsonl").length).toBeGreaterThan(0);
+    expect(screen.getByText(/Active conversation: Unit tests/)).toBeInTheDocument();
   });
 
   it("detects and attaches an external terminal session", async () => {

@@ -23,12 +23,13 @@ import {
   projectLabel,
   selectConversation,
 } from "./cockpitState";
+import { loadCockpitState, saveCockpitState } from "./cockpitPersistence";
 import { healthcheck, type HealthcheckResponse } from "../lib/tauri";
 
 export function App() {
   const [health, setHealth] = useState<HealthcheckResponse | null>(null);
   const [healthError, setHealthError] = useState<string | null>(null);
-  const [cockpitState, setCockpitState] = useState(() => detectPreviewExternalSessions(initialCockpitState));
+  const [cockpitState, setCockpitState] = useState(() => detectPreviewExternalSessions(loadCockpitState()));
 
   const agents = agentWorkspaces(cockpitState);
   const metrics = cockpitMetrics(cockpitState);
@@ -42,6 +43,10 @@ export function App() {
         setHealthError(error instanceof Error ? error.message : String(error));
       });
   }, []);
+
+  useEffect(() => {
+    saveCockpitState(cockpitState);
+  }, [cockpitState]);
 
   return (
     <main className="app-shell">

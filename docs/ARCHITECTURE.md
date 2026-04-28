@@ -40,6 +40,8 @@ Un meme projet peut donc contenir plusieurs IA, et chaque IA peut posseder plusi
 
 Un projet importe une fois reste connu par ToknIsland. Si l'utilisateur tente de reimporter le meme chemin, l'app selectionne le projet existant au lieu de creer un doublon.
 
+La bibliotheque de projets importes doit etre restauree au demarrage. En mode desktop, cette restauration viendra du stockage local ToknIsland ; en preview navigateur, elle peut etre simulee via `localStorage`.
+
 La visualisation principale doit reprendre une metaphore d'explorateur de fichiers :
 
 ```text

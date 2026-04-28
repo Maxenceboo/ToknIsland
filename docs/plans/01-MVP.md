@@ -13,6 +13,7 @@ Le MVP ne cherche pas a tout supporter. Il prouve le coeur du produit : piloter 
 - Importer un ou plusieurs dossiers projet locaux.
 - Garder une bibliotheque locale des projets deja importes.
 - Eviter les doublons si un projet est importe plusieurs fois.
+- Restaurer les projets importes et le thread actif au redemarrage.
 - Creer `.toknisland/` si absent.
 - Afficher le projet courant.
 - Afficher les IA configurees ou detectees pour le projet.
