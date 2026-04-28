@@ -18,6 +18,7 @@ jobs:
         shell: bash
         run: |
           test -f README.md
+          test -f AGENTS.md
           test -f CONTRIBUTING.md
           test -f SECURITY.md
           test -f docs/ARCHITECTURE.md
