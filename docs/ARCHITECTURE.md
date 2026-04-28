@@ -40,6 +40,16 @@ Un meme projet peut donc contenir plusieurs IA, et chaque IA peut posseder plusi
 
 Un projet importe une fois reste connu par ToknIsland. Si l'utilisateur tente de reimporter le meme chemin, l'app selectionne le projet existant au lieu de creer un doublon.
 
+La visualisation principale doit reprendre une metaphore d'explorateur de fichiers :
+
+```text
+project folder
+  agent folder
+    thread.jsonl
+```
+
+Les dossiers/fichiers sont une representation UI. Le stockage reel reste `.toknisland/`, `state.json`, `threads/*.jsonl` et l'index local.
+
 ### External Session Discovery
 
 ToknIsland doit detecter les agents IA deja ouverts dans d'autres terminaux locaux.

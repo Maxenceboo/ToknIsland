@@ -2,6 +2,7 @@ import {
   Activity,
   BarChart3,
   CircleStop,
+  FileText,
   FolderOpen,
   Gauge,
   Play,
@@ -55,20 +56,53 @@ export function App() {
           Import project
         </button>
 
-        <section className="stack">
-          <div className="section-title">Imported projects</div>
+        <section className="tree-panel">
+          <div className="section-title">Project tree</div>
           {cockpitState.importedProjects.length === 0 ? (
             <div className="empty-list">No imported project yet.</div>
           ) : (
             cockpitState.importedProjects.map((project) => (
-              <button className="project-row" key={project.path} type="button">
-                <strong>{project.name}</strong>
-                <small>{project.agents.length} agents</small>
-              </button>
+              <div className="tree-project" key={project.path}>
+                <button className="tree-node project-node" type="button">
+                  <FolderOpen size={16} />
+                  <span>
+                    <strong>{project.name}</strong>
+                    <small>{project.agents.length} agent folders</small>
+                  </span>
+                </button>
+
+                <div className="tree-children">
+                  {project.agents.map((agent) => (
+                    <div className="tree-agent" key={agent.id}>
+                      <div className="tree-node agent-node">
+                        <FolderOpen size={15} />
+                        <span>
+                          <strong>{agent.name}</strong>
+                          <small>{agent.conversations.length} thread files</small>
+                        </span>
+                      </div>
+
+                      <div className="tree-children thread-children">
+                        {agent.conversations.map((conversation) => (
+                          <button className="tree-node thread-node" key={conversation.id} type="button">
+                            <FileText size={14} />
+                            <span>
+                              <strong>{conversation.title}.jsonl</strong>
+                              <small>
+                                {conversation.status} | {conversation.tokens}
+                              </small>
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             ))
           )}
 
-          <div className="section-title">Agents & conversations</div>
+          <div className="section-title">Active agent folders</div>
           {agents.length === 0 ? (
             <div className="empty-list">Import a project to list agents.</div>
           ) : (
@@ -84,7 +118,7 @@ export function App() {
                     <span>
                       <strong>{conversation.title}</strong>
                       <small>
-                        {conversation.status} · {conversation.tokens}
+                        {conversation.status} | {conversation.tokens}
                       </small>
                     </span>
                   </button>
@@ -180,7 +214,7 @@ Backend: ${health ? `${health.status} (${health.app}, ${health.runtime})` : heal
               >
                 <strong>{session.agentName}</strong>
                 <small>
-                  {session.terminal} · pid {session.pid} · {session.status}
+                  {session.terminal} | pid {session.pid} | {session.status}
                 </small>
               </button>
             ))

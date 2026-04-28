@@ -137,6 +137,13 @@ small,
   margin-top: 28px;
 }
 
+.tree-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 28px;
+}
+
 .section-title {
   font-size: 12px;
   font-weight: 700;
@@ -162,6 +169,63 @@ small,
   margin-top: 8px;
   padding: 11px 12px;
   text-align: left;
+}
+
+.tree-project,
+.tree-agent {
+  display: flex;
+  flex-direction: column;
+}
+
+.tree-node {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 9px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #edf1f5;
+  padding: 7px 8px;
+  text-align: left;
+}
+
+.tree-node span {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tree-node strong,
+.tree-node small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-node {
+  background: rgba(73, 214, 158, 0.08);
+  color: #aaf7d3;
+}
+
+.agent-node {
+  color: #cbd6e2;
+}
+
+.thread-node {
+  color: #dfe6ee;
+}
+
+.tree-children {
+  margin-left: 14px;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  padding-left: 8px;
+}
+
+.thread-children {
+  margin-left: 13px;
 }
 
 .conversation-row {

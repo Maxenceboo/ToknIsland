@@ -14,7 +14,7 @@ describe("App", () => {
     expect(await screen.findByText(/Backend: preview/)).toBeInTheDocument();
   });
 
-  it("opens the preview project from the cockpit", async () => {
+  it("opens the preview project as a folder tree", async () => {
     const user = userEvent.setup();
 
     render(<App />);
@@ -22,6 +22,8 @@ describe("App", () => {
     await user.click(screen.getByRole("button", { name: "Import project" }));
 
     expect(screen.getByText("C:\\Users\\maxen\\Documents\\ToknIsland")).toBeInTheDocument();
+    expect(screen.getByText("Project tree")).toBeInTheDocument();
+    expect(screen.getByText("Scaffold setup.jsonl")).toBeInTheDocument();
     expect(screen.getByText(/Project loaded: ToknIsland/)).toBeInTheDocument();
     expect(screen.getByText("ready")).toBeInTheDocument();
   });
@@ -33,11 +35,11 @@ describe("App", () => {
 
     await user.click(screen.getByRole("button", { name: "Detect sessions" }));
 
-    expect(screen.getByText("PowerShell · pid 4242 · detected")).toBeInTheDocument();
+    expect(screen.getByText("PowerShell | pid 4242 | detected")).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Attach Codex session from PowerShell" }));
 
-    expect(screen.getByText("PowerShell · pid 4242 · attached")).toBeInTheDocument();
+    expect(screen.getByText("PowerShell | pid 4242 | attached")).toBeInTheDocument();
     expect(screen.getByText("running")).toBeInTheDocument();
   });
 });
