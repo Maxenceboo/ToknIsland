@@ -90,7 +90,7 @@ export function App() {
           <pre>
 {`$ ToknIsland runner
 Waiting for a project and agent command.
-Backend: ${health ? `${health.status} (${health.app})` : healthError ? `offline: ${healthError}` : "checking..."}`}
+Backend: ${health ? `${health.status} (${health.app}, ${health.runtime})` : healthError ? `offline: ${healthError}` : "checking..."}`}
           </pre>
         </section>
       </section>

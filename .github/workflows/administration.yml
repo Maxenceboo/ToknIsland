@@ -28,3 +28,4 @@ jobs:
           test -f docs/plans/INDEX.md
           test -f docs/plans/00-GROSSIER.md
           test -f docs/plans/01-MVP.md
+          test -f .github/workflows/app.yml

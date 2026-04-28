@@ -6,6 +6,7 @@ pub struct HealthcheckResponse {
     pub status: &'static str,
     pub app: &'static str,
     pub local_first: bool,
+    pub runtime: &'static str,
 }
 
 #[tauri::command]
@@ -14,6 +15,7 @@ pub fn healthcheck() -> HealthcheckResponse {
         status: "ok",
         app: "ToknIsland",
         local_first: true,
+        runtime: "tauri",
     }
 }
 
@@ -28,5 +30,6 @@ mod tests {
         assert_eq!(response.status, "ok");
         assert_eq!(response.app, "ToknIsland");
         assert!(response.local_first);
+        assert_eq!(response.runtime, "tauri");
     }
 }
