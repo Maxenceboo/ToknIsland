@@ -23,6 +23,38 @@ Le code applicatif Tauri/Rust/React n'est pas encore initialise dans ce repo.
 - Data : SQLite pour l'index local, JSONL pour les logs bruts
 - OS : Windows, macOS, Linux
 
+## Development
+
+Prerequisites:
+
+- Node.js and npm
+- Rust via rustup
+- Windows: Visual Studio Build Tools with MSVC and Windows SDK
+
+Install dependencies:
+
+```powershell
+npm install
+```
+
+Run the web UI only:
+
+```powershell
+npm run dev
+```
+
+Run the Tauri desktop app:
+
+```powershell
+npm run tauri:dev
+```
+
+Build the frontend:
+
+```powershell
+npm run build
+```
+
 ## Documents utiles
 
 - [Vision produit](docs/PRODUCT_VISION.md)
