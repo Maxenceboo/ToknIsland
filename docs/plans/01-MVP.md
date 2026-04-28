@@ -22,7 +22,7 @@ Le MVP ne cherche pas a tout supporter. Il prouve le coeur du produit : piloter 
 
 - Configurer une commande agent simple.
 - Lancer l'agent dans un PTY.
-- Detecter une IA deja ouverte dans un autre terminal local.
+- Detecter automatiquement une IA deja ouverte dans un autre terminal local.
 - Attacher une session externe detectee au projet correspondant.
 - Afficher la sortie en temps reel.
 - Envoyer une interruption utilisateur.

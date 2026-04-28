@@ -52,12 +52,13 @@ Les dossiers/fichiers sont une representation UI. Le stockage reel reste `.tokni
 
 ### External Session Discovery
 
-ToknIsland doit detecter les agents IA deja ouverts dans d'autres terminaux locaux.
+ToknIsland doit detecter automatiquement les agents IA deja ouverts dans d'autres terminaux locaux.
 
 Le flux cible :
 
 ```text
-Scan local processes
+App startup / project refresh
+  scan local processes
   detect AI CLI command
   infer project cwd
   match imported project by path

@@ -26,7 +26,7 @@ import { healthcheck, type HealthcheckResponse } from "../lib/tauri";
 export function App() {
   const [health, setHealth] = useState<HealthcheckResponse | null>(null);
   const [healthError, setHealthError] = useState<string | null>(null);
-  const [cockpitState, setCockpitState] = useState(initialCockpitState);
+  const [cockpitState, setCockpitState] = useState(() => detectPreviewExternalSessions(initialCockpitState));
 
   const agents = agentWorkspaces(cockpitState);
   const metrics = cockpitMetrics(cockpitState);
@@ -198,9 +198,6 @@ Backend: ${health ? `${health.status} (${health.app}, ${health.runtime})` : heal
 
         <section>
           <div className="section-title">External terminals</div>
-          <button className="secondary-action" type="button" onClick={() => setCockpitState(detectPreviewExternalSessions)}>
-            Detect sessions
-          </button>
           {cockpitState.externalSessions.length === 0 ? (
             <div className="empty-list">No external agent detected.</div>
           ) : (

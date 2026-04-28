@@ -33,8 +33,6 @@ describe("App", () => {
 
     render(<App />);
 
-    await user.click(screen.getByRole("button", { name: "Detect sessions" }));
-
     expect(screen.getByText("PowerShell | pid 4242 | detected")).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: "Attach Codex session from PowerShell" }));
