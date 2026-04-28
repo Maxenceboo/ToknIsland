@@ -10,11 +10,12 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
+  activeConversation,
+  agentWorkspaces,
   cockpitMetrics,
   initialCockpitState,
   openPreviewProject,
   projectLabel,
-  sessionSummaries,
 } from "./cockpitState";
 import { healthcheck, type HealthcheckResponse } from "../lib/tauri";
 
@@ -23,8 +24,9 @@ export function App() {
   const [healthError, setHealthError] = useState<string | null>(null);
   const [cockpitState, setCockpitState] = useState(initialCockpitState);
 
-  const sessions = sessionSummaries(cockpitState);
+  const agents = agentWorkspaces(cockpitState);
   const metrics = cockpitMetrics(cockpitState);
+  const currentConversation = activeConversation(cockpitState);
 
   useEffect(() => {
     healthcheck()
@@ -51,16 +53,30 @@ export function App() {
         </button>
 
         <section className="stack">
-          <div className="section-title">Sessions</div>
-          {sessions.map((session) => (
-            <button className="session-row" key={session.id} type="button">
-              <span className="agent-dot" />
-              <span>
-                <strong>{session.agent}</strong>
-                <small>{session.status}</small>
-              </span>
-            </button>
-          ))}
+          <div className="section-title">Agents & conversations</div>
+          {agents.length === 0 ? (
+            <div className="empty-list">Import a project to list agents.</div>
+          ) : (
+            agents.map((agent) => (
+              <div className="agent-group" key={agent.id}>
+                <div className="agent-heading">
+                  <span className={`agent-dot ${agent.accent}`} />
+                  <strong>{agent.name}</strong>
+                  <small>{agent.conversations.length}</small>
+                </div>
+                {agent.conversations.map((conversation) => (
+                  <button className="session-row conversation-row" key={conversation.id} type="button">
+                    <span>
+                      <strong>{conversation.title}</strong>
+                      <small>
+                        {conversation.status} · {conversation.tokens}
+                      </small>
+                    </span>
+                  </button>
+                ))}
+              </div>
+            ))
+          )}
         </section>
       </aside>
 
@@ -100,6 +116,7 @@ export function App() {
           <pre>
 {`$ ToknIsland runner
 ${cockpitState.project ? `Project loaded: ${cockpitState.project.name}` : "Waiting for a project and agent command."}
+${currentConversation ? `Active conversation: ${currentConversation.title}` : "No active conversation."}
 Backend: ${health ? `${health.status} (${health.app}, ${health.runtime})` : healthError ? `offline: ${healthError}` : "checking..."}`}
           </pre>
         </section>

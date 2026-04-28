@@ -10,9 +10,11 @@ Le MVP ne cherche pas a tout supporter. Il prouve le coeur du produit : piloter 
 
 ### Projet
 
-- Ouvrir un dossier projet local.
+- Importer un ou plusieurs dossiers projet locaux.
 - Creer `.toknisland/` si absent.
 - Afficher le projet courant.
+- Afficher les IA configurees ou detectees pour le projet.
+- Afficher plusieurs conversations par IA.
 
 ### Runner
 
@@ -27,12 +29,13 @@ Le MVP ne cherche pas a tout supporter. Il prouve le coeur du produit : piloter 
 - Creer un `thread_id`.
 - Ecrire les evenements en JSONL.
 - Maintenir `state.json`.
+- Structurer `state.json` par projet importe, IA, puis conversations.
 - Recharger la derniere session au demarrage.
 
 ### UI
 
 - Layout principal en trois zones :
-  - sidebar projets/sessions ;
+  - sidebar projets, IA et conversations ;
   - centre session terminal ;
   - panneau details/metadata.
 - Boutons start, stop, resume.
@@ -82,4 +85,3 @@ Le MVP ne cherche pas a tout supporter. Il prouve le coeur du produit : piloter 
 ## Critere de fin MVP
 
 Depuis un dossier projet, on peut lancer un agent, voir sa sortie, fermer ToknIsland, rouvrir ToknIsland et retrouver la session sauvegardee.
-

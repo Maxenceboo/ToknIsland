@@ -140,6 +140,11 @@ small,
   text-align: left;
 }
 
+.conversation-row {
+  margin-top: 7px;
+  padding-left: 14px;
+}
+
 .session-row span:last-child {
   display: flex;
   flex-direction: column;
@@ -152,6 +157,47 @@ small,
   border-radius: 999px;
   background: #7c5cff;
   box-shadow: 0 0 16px rgba(124, 92, 255, 0.75);
+}
+
+.agent-dot.teal {
+  background: #49d69e;
+  box-shadow: 0 0 16px rgba(73, 214, 158, 0.72);
+}
+
+.agent-dot.violet {
+  background: #7c5cff;
+  box-shadow: 0 0 16px rgba(124, 92, 255, 0.75);
+}
+
+.agent-dot.blue {
+  background: #4299e1;
+  box-shadow: 0 0 16px rgba(66, 153, 225, 0.72);
+}
+
+.agent-group {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.025);
+  padding: 10px;
+}
+
+.agent-heading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 2px 2px 4px;
+}
+
+.agent-heading small {
+  margin-left: auto;
+}
+
+.empty-list {
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  color: #8d96a3;
+  padding: 14px;
+  font-size: 13px;
 }
 
 .workspace {

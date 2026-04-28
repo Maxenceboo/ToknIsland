@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
+  activeConversation,
+  agentWorkspaces,
   cockpitMetrics,
+  conversationCount,
   initialCockpitState,
   openPreviewProject,
   projectLabel,
-  sessionSummaries,
 } from "./cockpitState";
 
 describe("cockpit state", () => {
@@ -17,14 +19,19 @@ describe("cockpit state", () => {
     const state = openPreviewProject(initialCockpitState);
 
     expect(state.project?.name).toBe("ToknIsland");
+    expect(state.activeAgentId).toBe("codex");
+    expect(state.activeConversationId).toBe("codex-setup");
     expect(state.runnerStatus).toBe("ready");
     expect(projectLabel(state.project)).toContain("ToknIsland");
   });
 
-  it("derives session and metric data from selected project", () => {
+  it("supports multiple agents and conversations per imported project", () => {
     const state = openPreviewProject(initialCockpitState);
 
-    expect(sessionSummaries(state)[0]).toMatchObject({ agent: "Codex", status: "Ready" });
-    expect(cockpitMetrics(state)).toContainEqual({ label: "Saved threads", value: "3" });
+    expect(agentWorkspaces(state)).toHaveLength(3);
+    expect(conversationCount(state)).toBe(4);
+    expect(activeConversation(state)).toMatchObject({ title: "Scaffold setup", status: "Ready" });
+    expect(cockpitMetrics(state)).toContainEqual({ label: "Active agents", value: "3" });
+    expect(cockpitMetrics(state)).toContainEqual({ label: "Saved threads", value: "4" });
   });
 });

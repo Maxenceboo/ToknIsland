@@ -26,6 +26,17 @@ Structure cible :
     toknisland.sqlite
 ```
 
+Le modele logique suit :
+
+```text
+Imported project
+  Agent workspace
+    Conversation/thread
+      JSONL events
+```
+
+Un meme projet peut donc contenir plusieurs IA, et chaque IA peut posseder plusieurs conversations.
+
 ### Overlay
 
 Fenetre Tauri secondaire transparente, sans bordure, toujours en haut au centre.
@@ -57,4 +68,3 @@ Gere les liens sortants vers :
 React gere l'interface, les panneaux, les controles, les vues analytics et les interactions utilisateur.
 
 Tailwind CSS sert au style, avec une direction visuelle sombre, dense et pro. Les icones viennent de Lucide.
-
