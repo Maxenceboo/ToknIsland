@@ -23,7 +23,8 @@ import {
   selectConversation,
 } from "./cockpitState";
 import { loadCockpitState, saveCockpitState } from "./cockpitPersistence";
-import { healthcheck, type HealthcheckResponse } from "../lib/tauri";
+import { threadActionFeedback, threadJsonlRelativePath } from "./threadActions";
+import { healthcheck, threadIdeTarget, type HealthcheckResponse } from "../lib/tauri";
 
 export function App() {
   const [health, setHealth] = useState<HealthcheckResponse | null>(null);
@@ -34,6 +35,21 @@ export function App() {
   const metrics = cockpitMetrics(cockpitState);
   const currentAgent = activeAgent(cockpitState);
   const currentConversation = activeConversation(cockpitState);
+  const currentThreadPath = currentConversation ? threadJsonlRelativePath(currentConversation) : null;
+
+  async function previewThreadAction(action: "resume" | "open-ide" | "raw-jsonl") {
+    if (!cockpitState.project || !currentConversation) {
+      return;
+    }
+
+    if (action === "open-ide") {
+      const target = await threadIdeTarget(cockpitState.project.path, currentConversation.id);
+      setActionFeedback(`Would open ${target.path} in VS Code`);
+      return;
+    }
+
+    setActionFeedback(threadActionFeedback(action, cockpitState.project, currentConversation));
+  }
 
   useEffect(() => {
     healthcheck()
@@ -226,26 +242,17 @@ Backend: ${health ? `${health.status} (${health.app}, ${health.runtime})` : heal
                 <span>Tokens</span>
                 <strong>{currentConversation.tokens}</strong>
               </div>
-              <code>.toknisland/threads/{currentConversation.id}.jsonl</code>
+              <code>{currentThreadPath}</code>
               <div className="thread-actions" aria-label="Thread actions">
-                <button
-                  type="button"
-                  onClick={() => setActionFeedback(`Would resume ${currentConversation.title}.jsonl`)}
-                >
+                <button type="button" onClick={() => previewThreadAction("resume")}>
                   <Play size={15} />
                   Resume
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setActionFeedback(`Would open ${currentConversation.id}.jsonl in VS Code`)}
-                >
+                <button type="button" onClick={() => previewThreadAction("open-ide")}>
                   <FolderOpen size={15} />
                   Open in IDE
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setActionFeedback(`Would inspect raw JSONL for ${currentConversation.id}`)}
-                >
+                <button type="button" onClick={() => previewThreadAction("raw-jsonl")}>
                   <FileText size={15} />
                   Raw JSONL
                 </button>

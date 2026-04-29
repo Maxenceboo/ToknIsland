@@ -154,6 +154,11 @@ Generer des liens :
 vscode://file/<absolute-path>:<line>:<column>
 ```
 
+Le frontend garde une couche `threadActions` pour construire les chemins JSONL et les messages d'action.
+Le backend expose `thread_ide_target` pour produire le chemin JSONL valide et le deep link VS Code.
+En mode navigateur, ces actions restent en preview. En runtime Tauri, l'ouverture effective passera ensuite par
+une commande native `interop.open_thread_in_ide`.
+
 ### Terminal
 
 Ouvrir :

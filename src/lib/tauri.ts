@@ -7,6 +7,11 @@ export type HealthcheckResponse = {
   runtime: "tauri" | "browser-preview";
 };
 
+export type ThreadIdeTarget = {
+  path: string;
+  uri: string;
+};
+
 export function healthcheck() {
   if (!isTauriRuntime()) {
     return Promise.resolve({
@@ -18,6 +23,19 @@ export function healthcheck() {
   }
 
   return invoke<HealthcheckResponse>("healthcheck");
+}
+
+export function threadIdeTarget(projectPath: string, threadId: string) {
+  if (!isTauriRuntime()) {
+    const path = `${projectPath}\\.toknisland\\threads\\${threadId}.jsonl`;
+
+    return Promise.resolve({
+      path,
+      uri: `vscode://file/${path.replaceAll("\\", "/")}`,
+    });
+  }
+
+  return invoke<ThreadIdeTarget>("thread_ide_target", { projectPath, threadId });
 }
 
 export function isTauriRuntime() {

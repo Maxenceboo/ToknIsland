@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { healthcheck, isTauriRuntime } from "./tauri";
+import { healthcheck, isTauriRuntime, threadIdeTarget } from "./tauri";
 
 describe("tauri bridge", () => {
   it("detects browser preview outside of Tauri", () => {
@@ -13,5 +13,14 @@ describe("tauri bridge", () => {
       localFirst: true,
       runtime: "browser-preview",
     });
+  });
+
+  it("builds preview thread IDE targets outside of Tauri", async () => {
+    const target = await threadIdeTarget("C:\\Users\\maxen\\Documents\\ToknIsland", "codex-tests");
+
+    expect(target.path).toBe("C:\\Users\\maxen\\Documents\\ToknIsland\\.toknisland\\threads\\codex-tests.jsonl");
+    expect(target.uri).toBe(
+      "vscode://file/C:/Users/maxen/Documents/ToknIsland/.toknisland/threads/codex-tests.jsonl",
+    );
   });
 });

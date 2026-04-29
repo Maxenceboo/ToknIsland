@@ -60,7 +60,9 @@ describe("App", () => {
 
     await user.click(screen.getByRole("button", { name: "Open in IDE" }));
 
-    expect(screen.getByRole("status")).toHaveTextContent("Would open codex-tests.jsonl in VS Code");
+    expect(await screen.findByRole("status")).toHaveTextContent(
+      "Would open C:\\Users\\maxen\\Documents\\ToknIsland\\.toknisland\\threads\\codex-tests.jsonl in VS Code",
+    );
   });
 
   it("restores imported projects without reimport after reload", async () => {
