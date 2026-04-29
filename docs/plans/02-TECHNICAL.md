@@ -76,6 +76,8 @@ src/
 - Lire les flux sans bloquer.
 - Emettre des events structures.
 - Arreter proprement.
+- Relier le PTY Rust au terminal frontend `xterm.js`.
+- Router les entrees clavier du terminal vers la session IA locale selectionnee.
 
 ### Events internes
 
@@ -104,6 +106,22 @@ Il sert de contrat visuel temporaire avant le branchement PTY reel.
 - Backpressure ou batching de chunks.
 - Timeout d'arret.
 - Logs JSONL append-only.
+
+### Terminal local IA
+
+Le panneau central est un vrai terminal local, pas une interface chat.
+
+```text
+xterm.js
+  -> terminal_write
+  -> Rust PTY portable-pty
+  -> CLI IA locale detectee
+  -> terminal_output event
+  -> xterm.js
+```
+
+En mode navigateur, `xterm.js` affiche un fallback preview. En mode Tauri, les commandes
+`terminal_start`, `terminal_write` et `terminal_stop` servent de contrat pour le PTY natif.
 
 ## Persistence
 

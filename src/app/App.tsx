@@ -30,7 +30,14 @@ import { previewThreadJsonl, threadActionFeedback, threadJsonlRelativePath } fro
 import { runnerPreviewEvent, runnerPreviewOutput } from "./runnerPreview";
 import { heatmapCells, projectTokenTotal } from "./cockpitAnalytics";
 import { summarizeAgent } from "./agentSummary";
-import { healthcheck, threadIdeTarget, type HealthcheckResponse } from "../lib/tauri";
+import { LocalIaTerminal } from "./LocalIaTerminal";
+import {
+  healthcheck,
+  terminalStart,
+  terminalWrite,
+  threadIdeTarget,
+  type HealthcheckResponse,
+} from "../lib/tauri";
 
 type TerminalMode = "runner" | "raw-jsonl";
 
@@ -76,6 +83,22 @@ export function App() {
       runnerEvents: [...state.runnerEvents, runnerPreviewEvent("scan", nextConversation)].slice(-25),
     }));
     setActionFeedback("Scanned local machine for installed and open IA sessions.");
+  }
+
+  async function writeToLocalTerminal(data: string) {
+    if (!cockpitState.project || !currentAgent || !currentConversation) {
+      return;
+    }
+
+    await terminalStart({
+      projectPath: cockpitState.project.path,
+      agentId: currentAgent.id,
+      threadId: currentConversation.id,
+    });
+    await terminalWrite({
+      sessionId: currentConversation.id,
+      data,
+    });
   }
 
   function stopPreviewRunner() {
@@ -276,7 +299,11 @@ export function App() {
             </div>
             <span className="status-pill">{cockpitState.runnerStatus}</span>
           </div>
-          <pre>{terminalOutput}</pre>
+          {terminalMode === "raw-jsonl" ? (
+            <pre>{terminalOutput}</pre>
+          ) : (
+            <LocalIaTerminal output={terminalOutput} onInput={writeToLocalTerminal} />
+          )}
         </section>
       </section>
 

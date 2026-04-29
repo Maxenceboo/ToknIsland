@@ -21,9 +21,9 @@ Pas de landing page dans l'app. Le premier ecran doit etre le cockpit utilisable
 
 ### Zone centrale
 
-- Terminal/session output.
+- Terminal local IA via `xterm.js`.
 - Barre d'etat agent.
-- Prompt/input si necessaire.
+- Saisie clavier directement dans le terminal.
 - Actions principales : scan local, stop, resume.
 
 ### Panneau droit

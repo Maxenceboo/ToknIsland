@@ -467,6 +467,36 @@ pre {
   line-height: 1.65;
 }
 
+.local-terminal-shell {
+  position: relative;
+  min-height: 0;
+  flex: 1;
+}
+
+.local-terminal {
+  height: 100%;
+  overflow: hidden;
+  padding: 12px;
+}
+
+.local-terminal .xterm {
+  height: 100%;
+}
+
+.terminal-transcript {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: pre;
+}
+
+.local-terminal-test {
+  flex: 1;
+}
+
 .detail-row {
   justify-content: space-between;
   margin-top: 12px;

@@ -16,6 +16,7 @@ describe("App", () => {
     expect(screen.getByRole("button", { name: "Import project" })).toBeInTheDocument();
     expect(screen.getByLabelText("Active context")).toBeInTheDocument();
     expect(screen.getByText("Runner output")).toBeInTheDocument();
+    expect(screen.getByLabelText("Local IA terminal")).toBeInTheDocument();
     expect(await screen.findByText(/Backend: preview/)).toBeInTheDocument();
   });
 
