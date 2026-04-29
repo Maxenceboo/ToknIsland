@@ -65,6 +65,35 @@ describe("App", () => {
     );
   });
 
+  it("resumes a selected thread into the runner view", async () => {
+    const user = userEvent.setup();
+
+    render(<App />);
+
+    await user.click(screen.getByRole("button", { name: "Import project" }));
+    await user.click(screen.getByRole("button", { name: "Select thread Unit tests.jsonl" }));
+    await user.click(screen.getByRole("button", { name: "Resume" }));
+
+    expect(screen.getAllByText("running").length).toBeGreaterThan(0);
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "Would resume Unit tests.jsonl from .toknisland/threads/codex-tests.jsonl",
+    );
+  });
+
+  it("shows a raw JSONL preview for the selected thread", async () => {
+    const user = userEvent.setup();
+
+    render(<App />);
+
+    await user.click(screen.getByRole("button", { name: "Import project" }));
+    await user.click(screen.getByRole("button", { name: "Select thread Unit tests.jsonl" }));
+    await user.click(screen.getByRole("button", { name: "Raw JSONL" }));
+
+    expect(screen.getByText("Raw JSONL", { selector: ".panel-header span" })).toBeInTheDocument();
+    expect(screen.getByText(/"type":"session_resumed"/)).toBeInTheDocument();
+    expect(screen.getByText(/"thread_id":"codex-tests"/)).toBeInTheDocument();
+  });
+
   it("restores imported projects without reimport after reload", async () => {
     const user = userEvent.setup();
 

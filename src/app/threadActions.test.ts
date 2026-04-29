@@ -4,9 +4,11 @@ import {
   threadActionFeedback,
   threadJsonlAbsolutePath,
   threadJsonlRelativePath,
+  previewThreadJsonl,
   vscodeThreadUri,
 } from "./threadActions";
 
+const agent = previewProject.agents[0];
 const conversation = previewProject.agents[0].conversations[1];
 
 describe("threadActions", () => {
@@ -30,5 +32,18 @@ describe("threadActions", () => {
     expect(threadActionFeedback("raw-jsonl", previewProject, conversation)).toBe(
       "Would inspect raw JSONL at .toknisland/threads/codex-tests.jsonl",
     );
+  });
+
+  it("builds a safe preview JSONL payload for the raw thread view", () => {
+    const lines = previewThreadJsonl(previewProject, agent, conversation).split("\n");
+
+    expect(lines).toHaveLength(3);
+    expect(JSON.parse(lines[0])).toMatchObject({
+      type: "session_resumed",
+      thread_id: "codex-tests",
+    });
+    expect(JSON.parse(lines[1])).toMatchObject({
+      storage: ".toknisland/threads/codex-tests.jsonl",
+    });
   });
 });

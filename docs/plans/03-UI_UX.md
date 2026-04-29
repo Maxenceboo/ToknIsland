@@ -16,6 +16,7 @@ Pas de landing page dans l'app. Le premier ecran doit etre le cockpit utilisable
 - Conversations affichees comme fichiers `thread.jsonl`.
 - Selection d'un fichier thread pour changer la conversation active.
 - Inspecteur de thread avec actions contextuelles : resume, ouvrir dans l'IDE, voir le JSONL brut.
+- Vue centrale bascule entre sortie runner et apercu JSONL pour inspecter un thread sans quitter le cockpit.
 - Bouton nouveau run.
 
 ### Zone centrale

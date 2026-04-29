@@ -1,4 +1,4 @@
-import type { ConversationSummary, ImportedProject } from "./cockpitState";
+import type { AgentWorkspace, ConversationSummary, ImportedProject } from "./cockpitState";
 
 export type ThreadAction = "resume" | "open-ide" | "raw-jsonl";
 
@@ -32,4 +32,33 @@ export function threadActionFeedback(
   }
 
   return `Would inspect raw JSONL at ${relativePath}`;
+}
+
+export function previewThreadJsonl(
+  project: ImportedProject,
+  agent: AgentWorkspace,
+  conversation: ConversationSummary,
+) {
+  return [
+    {
+      type: "session_resumed",
+      project_path: project.path,
+      agent_id: agent.id,
+      thread_id: conversation.id,
+      title: conversation.title,
+    },
+    {
+      type: "thread_summary",
+      status: conversation.status,
+      tokens: conversation.tokens,
+      storage: threadJsonlRelativePath(conversation),
+    },
+    {
+      type: "output_chunk",
+      stream: "stdout",
+      data: `Preview loaded for ${conversation.title}.jsonl`,
+    },
+  ]
+    .map((event) => JSON.stringify(event))
+    .join("\n");
 }

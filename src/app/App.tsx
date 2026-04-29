@@ -20,25 +20,43 @@ import {
   initialCockpitState,
   openPreviewProject,
   projectLabel,
+  resumeConversation,
   selectConversation,
 } from "./cockpitState";
 import { loadCockpitState, saveCockpitState } from "./cockpitPersistence";
-import { threadActionFeedback, threadJsonlRelativePath } from "./threadActions";
+import { previewThreadJsonl, threadActionFeedback, threadJsonlRelativePath } from "./threadActions";
 import { healthcheck, threadIdeTarget, type HealthcheckResponse } from "../lib/tauri";
+
+type TerminalMode = "runner" | "raw-jsonl";
 
 export function App() {
   const [health, setHealth] = useState<HealthcheckResponse | null>(null);
   const [healthError, setHealthError] = useState<string | null>(null);
   const [cockpitState, setCockpitState] = useState(() => detectPreviewExternalSessions(loadCockpitState()));
   const [actionFeedback, setActionFeedback] = useState("Ready for local actions.");
+  const [terminalMode, setTerminalMode] = useState<TerminalMode>("runner");
 
   const metrics = cockpitMetrics(cockpitState);
   const currentAgent = activeAgent(cockpitState);
   const currentConversation = activeConversation(cockpitState);
   const currentThreadPath = currentConversation ? threadJsonlRelativePath(currentConversation) : null;
+  const terminalOutput =
+    terminalMode === "raw-jsonl" && cockpitState.project && currentAgent && currentConversation
+      ? previewThreadJsonl(cockpitState.project, currentAgent, currentConversation)
+      : `$ ToknIsland runner
+${cockpitState.project ? `Project loaded: ${cockpitState.project.name}` : "Waiting for a project and agent command."}
+${currentConversation ? `Active conversation: ${currentConversation.title}` : "No active conversation."}
+Backend: ${health ? `${health.status} (${health.app}, ${health.runtime})` : healthError ? `offline: ${healthError}` : "checking..."}`;
 
   async function previewThreadAction(action: "resume" | "open-ide" | "raw-jsonl") {
     if (!cockpitState.project || !currentConversation) {
+      return;
+    }
+
+    if (action === "resume") {
+      setCockpitState(resumeConversation);
+      setTerminalMode("runner");
+      setActionFeedback(threadActionFeedback(action, cockpitState.project, currentConversation));
       return;
     }
 
@@ -46,6 +64,10 @@ export function App() {
       const target = await threadIdeTarget(cockpitState.project.path, currentConversation.id);
       setActionFeedback(`Would open ${target.path} in VS Code`);
       return;
+    }
+
+    if (action === "raw-jsonl") {
+      setTerminalMode("raw-jsonl");
     }
 
     setActionFeedback(threadActionFeedback(action, cockpitState.project, currentConversation));
@@ -184,16 +206,11 @@ export function App() {
           <div className="panel-header">
             <div>
               <Terminal size={18} />
-              <span>Runner output</span>
+              <span>{terminalMode === "raw-jsonl" ? "Raw JSONL" : "Runner output"}</span>
             </div>
-            <span className="status-pill">standby</span>
+            <span className="status-pill">{cockpitState.runnerStatus}</span>
           </div>
-          <pre>
-{`$ ToknIsland runner
-${cockpitState.project ? `Project loaded: ${cockpitState.project.name}` : "Waiting for a project and agent command."}
-${currentConversation ? `Active conversation: ${currentConversation.title}` : "No active conversation."}
-Backend: ${health ? `${health.status} (${health.app}, ${health.runtime})` : healthError ? `offline: ${healthError}` : "checking..."}`}
-          </pre>
+          <pre>{terminalOutput}</pre>
         </section>
       </section>
 

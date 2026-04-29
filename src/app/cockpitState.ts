@@ -154,6 +154,17 @@ export function selectConversation(state: CockpitState, agentId: string, convers
   };
 }
 
+export function resumeConversation(state: CockpitState): CockpitState {
+  if (!state.project || !state.activeAgentId || !state.activeConversationId) {
+    return state;
+  }
+
+  return {
+    ...state,
+    runnerStatus: "running",
+  };
+}
+
 export function projectLabel(project: ImportedProject | null) {
   return project ? project.path : "No project selected";
 }
