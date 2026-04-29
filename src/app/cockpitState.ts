@@ -165,6 +165,26 @@ export function resumeConversation(state: CockpitState): CockpitState {
   };
 }
 
+export function startRunner(state: CockpitState): CockpitState {
+  const nextState = state.project ? state : openPreviewProject(state);
+
+  return {
+    ...nextState,
+    runnerStatus: "running",
+  };
+}
+
+export function stopRunner(state: CockpitState): CockpitState {
+  if (state.runnerStatus !== "running") {
+    return state;
+  }
+
+  return {
+    ...state,
+    runnerStatus: "stopped",
+  };
+}
+
 export function projectLabel(project: ImportedProject | null) {
   return project ? project.path : "No project selected";
 }

@@ -94,6 +94,23 @@ describe("App", () => {
     expect(screen.getByText(/"thread_id":"codex-tests"/)).toBeInTheDocument();
   });
 
+  it("starts and stops the preview runner from the topbar", async () => {
+    const user = userEvent.setup();
+
+    render(<App />);
+
+    await user.click(screen.getByRole("button", { name: "Start agent" }));
+
+    expect(screen.getByText(/Project loaded: ToknIsland/)).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("Started preview runner for the active thread.");
+    expect(screen.getAllByText("running").length).toBeGreaterThan(0);
+
+    await user.click(screen.getByRole("button", { name: "Stop agent" }));
+
+    expect(screen.getByRole("status")).toHaveTextContent("Stopped preview runner.");
+    expect(screen.getAllByText("stopped").length).toBeGreaterThan(0);
+  });
+
   it("restores imported projects without reimport after reload", async () => {
     const user = userEvent.setup();
 

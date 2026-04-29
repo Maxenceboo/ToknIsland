@@ -22,6 +22,8 @@ import {
   projectLabel,
   resumeConversation,
   selectConversation,
+  startRunner,
+  stopRunner,
 } from "./cockpitState";
 import { loadCockpitState, saveCockpitState } from "./cockpitPersistence";
 import { previewThreadJsonl, threadActionFeedback, threadJsonlRelativePath } from "./threadActions";
@@ -47,6 +49,20 @@ export function App() {
 ${cockpitState.project ? `Project loaded: ${cockpitState.project.name}` : "Waiting for a project and agent command."}
 ${currentConversation ? `Active conversation: ${currentConversation.title}` : "No active conversation."}
 Backend: ${health ? `${health.status} (${health.app}, ${health.runtime})` : healthError ? `offline: ${healthError}` : "checking..."}`;
+
+  function startPreviewRunner() {
+    setCockpitState(startRunner);
+    setTerminalMode("runner");
+    setActionFeedback("Started preview runner for the active thread.");
+  }
+
+  function stopPreviewRunner() {
+    setCockpitState(stopRunner);
+    setTerminalMode("runner");
+    setActionFeedback(
+      cockpitState.runnerStatus === "running" ? "Stopped preview runner." : "Runner is already idle.",
+    );
+  }
 
   async function previewThreadAction(action: "resume" | "open-ide" | "raw-jsonl") {
     if (!cockpitState.project || !currentConversation) {
@@ -164,10 +180,22 @@ Backend: ${health ? `${health.status} (${health.app}, ${health.runtime})` : heal
             <h2>Cockpit</h2>
           </div>
           <div className="toolbar">
-            <button className="icon-button run" type="button" title="Start agent">
+            <button
+              className="icon-button run"
+              type="button"
+              title="Start agent"
+              aria-label="Start agent"
+              onClick={startPreviewRunner}
+            >
               <Play size={18} />
             </button>
-            <button className="icon-button stop" type="button" title="Stop agent">
+            <button
+              className="icon-button stop"
+              type="button"
+              title="Stop agent"
+              aria-label="Stop agent"
+              onClick={stopPreviewRunner}
+            >
               <CircleStop size={18} />
             </button>
           </div>

@@ -13,7 +13,10 @@ import {
   openPreviewProject,
   previewProject,
   projectLabel,
+  resumeConversation,
   selectConversation,
+  startRunner,
+  stopRunner,
 } from "./cockpitState";
 
 describe("cockpit state", () => {
@@ -75,5 +78,22 @@ describe("cockpit state", () => {
     expect(activeAgent(selected)).toMatchObject({ name: "Codex" });
     expect(activeConversation(selected)).toMatchObject({ title: "Unit tests", status: "Completed" });
     expect(selected.activeConversationId).toBe("codex-tests");
+  });
+
+  it("starts the runner from an empty cockpit by opening the preview project", () => {
+    const started = startRunner(initialCockpitState);
+
+    expect(started.project?.name).toBe("ToknIsland");
+    expect(started.runnerStatus).toBe("running");
+    expect(activeConversation(started)).toMatchObject({ title: "Scaffold setup" });
+  });
+
+  it("resumes and stops the active runner", () => {
+    const selected = selectConversation(openPreviewProject(initialCockpitState), "codex", "codex-tests");
+    const resumed = resumeConversation(selected);
+    const stopped = stopRunner(resumed);
+
+    expect(resumed.runnerStatus).toBe("running");
+    expect(stopped.runnerStatus).toBe("stopped");
   });
 });
