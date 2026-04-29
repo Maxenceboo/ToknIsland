@@ -25,7 +25,7 @@ import {
   startRunner,
   stopRunner,
 } from "./cockpitState";
-import { loadCockpitState, saveCockpitState } from "./cockpitPersistence";
+import { loadCockpitState, loadCockpitUiState, saveCockpitState, saveCockpitUiState } from "./cockpitPersistence";
 import { previewThreadJsonl, threadActionFeedback, threadJsonlRelativePath } from "./threadActions";
 import { runnerPreviewEvent, runnerPreviewOutput } from "./runnerPreview";
 import { healthcheck, threadIdeTarget, type HealthcheckResponse } from "../lib/tauri";
@@ -33,12 +33,13 @@ import { healthcheck, threadIdeTarget, type HealthcheckResponse } from "../lib/t
 type TerminalMode = "runner" | "raw-jsonl";
 
 export function App() {
+  const [cockpitUiState, setCockpitUiState] = useState(loadCockpitUiState);
   const [health, setHealth] = useState<HealthcheckResponse | null>(null);
   const [healthError, setHealthError] = useState<string | null>(null);
   const [cockpitState, setCockpitState] = useState(() => detectPreviewExternalSessions(loadCockpitState()));
   const [actionFeedback, setActionFeedback] = useState("Ready for local actions.");
-  const [terminalMode, setTerminalMode] = useState<TerminalMode>("runner");
-  const [runnerEvents, setRunnerEvents] = useState<string[]>([]);
+  const terminalMode = cockpitUiState.terminalMode;
+  const runnerEvents = cockpitUiState.runnerEvents;
 
   const metrics = cockpitMetrics(cockpitState);
   const currentAgent = activeAgent(cockpitState);
@@ -63,16 +64,22 @@ export function App() {
 
   function startPreviewRunner() {
     setCockpitState(startRunner);
-    setTerminalMode("runner");
-    setRunnerEvents((events) => [...events, runnerPreviewEvent("start", currentConversation)]);
+    setCockpitUiState((state) => ({
+      terminalMode: "runner",
+      runnerEvents: [...state.runnerEvents, runnerPreviewEvent("start", currentConversation)].slice(-25),
+    }));
     setActionFeedback("Started preview runner for the active thread.");
   }
 
   function stopPreviewRunner() {
     setCockpitState(stopRunner);
-    setTerminalMode("runner");
     if (cockpitState.runnerStatus === "running") {
-      setRunnerEvents((events) => [...events, runnerPreviewEvent("stop", currentConversation)]);
+      setCockpitUiState((state) => ({
+        terminalMode: "runner",
+        runnerEvents: [...state.runnerEvents, runnerPreviewEvent("stop", currentConversation)].slice(-25),
+      }));
+    } else {
+      setCockpitUiState((state) => ({ ...state, terminalMode: "runner" }));
     }
     setActionFeedback(
       cockpitState.runnerStatus === "running" ? "Stopped preview runner." : "Runner is already idle.",
@@ -86,8 +93,10 @@ export function App() {
 
     if (action === "resume") {
       setCockpitState(resumeConversation);
-      setTerminalMode("runner");
-      setRunnerEvents((events) => [...events, runnerPreviewEvent("resume", currentConversation)]);
+      setCockpitUiState((state) => ({
+        terminalMode: "runner",
+        runnerEvents: [...state.runnerEvents, runnerPreviewEvent("resume", currentConversation)].slice(-25),
+      }));
       setActionFeedback(threadActionFeedback(action, cockpitState.project, currentConversation));
       return;
     }
@@ -99,7 +108,7 @@ export function App() {
     }
 
     if (action === "raw-jsonl") {
-      setTerminalMode("raw-jsonl");
+      setCockpitUiState((state) => ({ ...state, terminalMode: "raw-jsonl" }));
     }
 
     setActionFeedback(threadActionFeedback(action, cockpitState.project, currentConversation));
@@ -116,6 +125,10 @@ export function App() {
   useEffect(() => {
     saveCockpitState(cockpitState);
   }, [cockpitState]);
+
+  useEffect(() => {
+    saveCockpitUiState(cockpitUiState);
+  }, [cockpitUiState]);
 
   return (
     <main className="app-shell">

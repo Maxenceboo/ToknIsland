@@ -130,6 +130,19 @@ describe("App", () => {
     expect(screen.getByText(/Active conversation: Unit tests/)).toBeInTheDocument();
   });
 
+  it("restores the runner preview after reload", async () => {
+    const user = userEvent.setup();
+
+    const { unmount } = render(<App />);
+
+    await user.click(screen.getByRole("button", { name: "Start agent" }));
+
+    unmount();
+    render(<App />);
+
+    expect(screen.getByText(/event: session_started target=pending thread/)).toBeInTheDocument();
+  });
+
   it("detects and attaches an external terminal session", async () => {
     const user = userEvent.setup();
 

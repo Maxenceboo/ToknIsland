@@ -36,6 +36,7 @@ Le MVP ne cherche pas a tout supporter. Il prouve le coeur du produit : piloter 
 - Maintenir `state.json`.
 - Structurer `state.json` par projet importe, IA, puis conversations.
 - Recharger la derniere session au demarrage.
+- Restaurer la timeline runner recente dans le cockpit preview.
 
 ### UI
 

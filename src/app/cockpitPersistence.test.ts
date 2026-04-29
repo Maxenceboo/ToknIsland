@@ -1,6 +1,14 @@
 import { describe, expect, it, beforeEach } from "vitest";
 import { openPreviewProject, selectConversation, initialCockpitState } from "./cockpitState";
-import { COCKPIT_STORAGE_KEY, loadCockpitState, saveCockpitState } from "./cockpitPersistence";
+import {
+  COCKPIT_STORAGE_KEY,
+  COCKPIT_UI_STORAGE_KEY,
+  initialCockpitUiState,
+  loadCockpitState,
+  loadCockpitUiState,
+  saveCockpitState,
+  saveCockpitUiState,
+} from "./cockpitPersistence";
 
 describe("cockpit persistence", () => {
   beforeEach(() => {
@@ -30,5 +38,24 @@ describe("cockpit persistence", () => {
     window.localStorage.setItem(COCKPIT_STORAGE_KEY, "{broken");
 
     expect(loadCockpitState()).toEqual(initialCockpitState);
+  });
+
+  it("persists runner preview UI state separately from project state", () => {
+    saveCockpitUiState({
+      terminalMode: "raw-jsonl",
+      runnerEvents: ["session_started target=Scaffold setup.jsonl", "session_interrupted target=Scaffold setup.jsonl"],
+    });
+
+    expect(window.localStorage.getItem(COCKPIT_UI_STORAGE_KEY)).toContain("session_started");
+    expect(loadCockpitUiState()).toEqual({
+      terminalMode: "raw-jsonl",
+      runnerEvents: ["session_started target=Scaffold setup.jsonl", "session_interrupted target=Scaffold setup.jsonl"],
+    });
+  });
+
+  it("falls back safely when stored UI data is invalid", () => {
+    window.localStorage.setItem(COCKPIT_UI_STORAGE_KEY, "{broken");
+
+    expect(loadCockpitUiState()).toEqual(initialCockpitUiState);
   });
 });
