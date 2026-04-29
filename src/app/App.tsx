@@ -28,6 +28,7 @@ import {
 import { loadCockpitState, loadCockpitUiState, saveCockpitState, saveCockpitUiState } from "./cockpitPersistence";
 import { previewThreadJsonl, threadActionFeedback, threadJsonlRelativePath } from "./threadActions";
 import { runnerPreviewEvent, runnerPreviewOutput } from "./runnerPreview";
+import { heatmapCells, projectTokenTotal } from "./cockpitAnalytics";
 import { healthcheck, threadIdeTarget, type HealthcheckResponse } from "../lib/tauri";
 
 type TerminalMode = "runner" | "raw-jsonl";
@@ -42,6 +43,8 @@ export function App() {
   const runnerEvents = cockpitUiState.runnerEvents;
 
   const metrics = cockpitMetrics(cockpitState);
+  const tokenTotal = projectTokenTotal(cockpitState.project);
+  const heatmap = heatmapCells(cockpitState, runnerEvents);
   const currentAgent = activeAgent(cockpitState);
   const currentConversation = activeConversation(cockpitState);
   const currentThreadPath = currentConversation ? threadJsonlRelativePath(currentConversation) : null;
@@ -365,15 +368,20 @@ export function App() {
 
         <section>
           <div className="section-title">Analytics</div>
-          <div className="heatmap">
-            {Array.from({ length: 35 }).map((_, index) => (
-              <span key={index} className={index % 7 === 0 ? "hot" : index % 5 === 0 ? "warm" : ""} />
+          <div className="heatmap" aria-label="Token activity heatmap">
+            {heatmap.map((cell) => (
+              <span key={cell.id} className={`level-${cell.level}`} />
             ))}
           </div>
           <div className="detail-row">
             <BarChart3 size={17} />
             <span>Token parser</span>
-            <strong>planned</strong>
+            <strong>{tokenTotal}</strong>
+          </div>
+          <div className="detail-row">
+            <Activity size={17} />
+            <span>Runner events</span>
+            <strong>{runnerEvents.length}</strong>
           </div>
         </section>
       </aside>

@@ -51,6 +51,7 @@ describe("cockpit state", () => {
     expect(activeConversation(state)).toMatchObject({ title: "Scaffold setup", status: "Ready" });
     expect(cockpitMetrics(state)).toContainEqual({ label: "Active agents", value: "3" });
     expect(cockpitMetrics(state)).toContainEqual({ label: "Saved threads", value: "4" });
+    expect(cockpitMetrics(state)).toContainEqual({ label: "Token cost", value: "$0.01" });
   });
 
   it("detects and attaches an external terminal agent session", () => {

@@ -570,11 +570,15 @@ pre {
   background: rgba(255, 255, 255, 0.08);
 }
 
-.heatmap span.warm {
+.heatmap span.level-1 {
+  background: rgba(73, 214, 158, 0.28);
+}
+
+.heatmap span.level-2 {
   background: rgba(66, 153, 225, 0.62);
 }
 
-.heatmap span.hot {
+.heatmap span.level-3 {
   background: rgba(73, 214, 158, 0.74);
 }
 

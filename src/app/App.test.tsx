@@ -31,6 +31,8 @@ describe("App", () => {
     expect(screen.getAllByText("Scaffold setup.jsonl").length).toBeGreaterThan(0);
     expect(screen.getByText("browser-preview")).toBeInTheDocument();
     expect(screen.getByText(/Project loaded: ToknIsland/)).toBeInTheDocument();
+    expect(screen.getByLabelText("Token activity heatmap")).toBeInTheDocument();
+    expect(screen.getByText("2040")).toBeInTheDocument();
     expect(screen.getAllByText("ready").length).toBeGreaterThan(0);
   });
 

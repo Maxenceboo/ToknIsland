@@ -1,4 +1,5 @@
 import { metrics as defaultMetrics } from "./cockpitData";
+import { analyticsMetrics } from "./cockpitAnalytics";
 
 export type ConversationSummary = {
   id: string;
@@ -232,7 +233,7 @@ export function cockpitMetrics(state: CockpitState) {
     return defaultMetrics;
   }
 
-  return defaultMetrics.map((metric) => {
+  const metrics = defaultMetrics.map((metric) => {
     if (metric.label === "Saved threads") {
       return { ...metric, value: String(conversationCount(state)) };
     }
@@ -243,4 +244,6 @@ export function cockpitMetrics(state: CockpitState) {
 
     return metric;
   });
+
+  return analyticsMetrics(state, metrics);
 }

@@ -147,6 +147,8 @@ Chaque ligne est un evenement :
 - Top sessions.
 - Evolution journaliere.
 
+Le cockpit preview calcule deja le total tokens, un cout indicatif local et une heatmap stable depuis les threads importes et les evenements runner.
+
 ## Interconnectivity
 
 ### VS Code
