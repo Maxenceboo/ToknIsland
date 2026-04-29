@@ -17,14 +17,14 @@ Pas de landing page dans l'app. Le premier ecran doit etre le cockpit utilisable
 - Selection d'un fichier thread pour changer la conversation active.
 - Inspecteur de thread avec actions contextuelles : resume, ouvrir dans l'IDE, voir le JSONL brut.
 - Vue centrale bascule entre sortie runner et apercu JSONL pour inspecter un thread sans quitter le cockpit.
-- Boutons globaux start/stop dans le topbar avec feedback d'etat runner.
+- Bouton global scan local dans le topbar pour detecter les IA installees ou ouvertes sur le PC.
 
 ### Zone centrale
 
 - Terminal/session output.
 - Barre d'etat agent.
 - Prompt/input si necessaire.
-- Actions principales : start, stop, resume.
+- Actions principales : scan local, stop, resume.
 
 ### Panneau droit
 

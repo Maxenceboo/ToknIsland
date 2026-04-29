@@ -99,23 +99,21 @@ describe("App", () => {
     expect(screen.getByText(/"thread_id":"codex-tests"/)).toBeInTheDocument();
   });
 
-  it("starts and stops the preview runner from the topbar", async () => {
+  it("scans local IAs from the topbar without starting a runner", async () => {
     const user = userEvent.setup();
 
     render(<App />);
 
-    await user.click(screen.getByRole("button", { name: "Start agent" }));
+    await user.click(screen.getByRole("button", { name: "Scan local IAs" }));
 
     expect(screen.getByText(/Project loaded: ToknIsland/)).toBeInTheDocument();
-    expect(screen.getByText(/event: session_started target=Scaffold setup.jsonl/)).toBeInTheDocument();
-    expect(screen.getByRole("status")).toHaveTextContent("Started preview runner for the active thread.");
-    expect(screen.getAllByText("running").length).toBeGreaterThan(0);
+    expect(screen.getByText(/event: agent_discovery target=Scaffold setup.jsonl/)).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("Scanned local machine for installed and open IA sessions.");
+    expect(screen.getAllByText("ready").length).toBeGreaterThan(0);
 
     await user.click(screen.getByRole("button", { name: "Stop agent" }));
 
-    expect(screen.getByRole("status")).toHaveTextContent("Stopped preview runner.");
-    expect(screen.getByText(/event: session_interrupted/)).toBeInTheDocument();
-    expect(screen.getAllByText("stopped").length).toBeGreaterThan(0);
+    expect(screen.getByRole("status")).toHaveTextContent("Runner is already idle.");
   });
 
   it("restores imported projects without reimport after reload", async () => {
@@ -139,12 +137,12 @@ describe("App", () => {
 
     const { unmount } = render(<App />);
 
-    await user.click(screen.getByRole("button", { name: "Start agent" }));
+    await user.click(screen.getByRole("button", { name: "Scan local IAs" }));
 
     unmount();
     render(<App />);
 
-    expect(screen.getByText(/event: session_started target=Scaffold setup.jsonl/)).toBeInTheDocument();
+    expect(screen.getByText(/event: agent_discovery target=Scaffold setup.jsonl/)).toBeInTheDocument();
   });
 
   it("detects and attaches an external terminal session", async () => {

@@ -13,13 +13,13 @@ describe("runnerPreview", () => {
       conversation,
       backend: "preview (ToknIsland, browser-preview)",
       status: "running",
-      events: [runnerPreviewEvent("start", conversation)],
+      events: [runnerPreviewEvent("scan", conversation)],
     });
 
     expect(output).toContain("Project loaded: ToknIsland");
     expect(output).toContain("Agent folder: Codex");
     expect(output).toContain("Runner status: running");
-    expect(output).toContain("event: session_started target=Unit tests.jsonl");
+    expect(output).toContain("event: agent_discovery target=Unit tests.jsonl");
   });
 
   it("formats empty cockpit output", () => {

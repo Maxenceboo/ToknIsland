@@ -9,8 +9,15 @@ export type RunnerPreviewContext = {
   events: string[];
 };
 
-export function runnerPreviewEvent(action: "start" | "stop" | "resume", conversation: ConversationSummary | null) {
+export function runnerPreviewEvent(
+  action: "scan" | "start" | "stop" | "resume",
+  conversation: ConversationSummary | null,
+) {
   const target = conversation ? `${conversation.title}.jsonl` : "pending thread";
+
+  if (action === "scan") {
+    return `agent_discovery target=${target}`;
+  }
 
   if (action === "start") {
     return `session_started target=${target}`;

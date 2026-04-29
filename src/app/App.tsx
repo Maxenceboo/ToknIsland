@@ -5,7 +5,8 @@ import {
   FileText,
   FolderOpen,
   Gauge,
-  Play,
+  Radar,
+  RotateCcw,
   ShieldCheck,
   Terminal,
 } from "lucide-react";
@@ -22,7 +23,6 @@ import {
   projectLabel,
   resumeConversation,
   selectConversation,
-  startRunner,
   stopRunner,
 } from "./cockpitState";
 import { loadCockpitState, loadCockpitUiState, saveCockpitState, saveCockpitUiState } from "./cockpitPersistence";
@@ -66,16 +66,16 @@ export function App() {
           events: runnerEvents,
         });
 
-  function startPreviewRunner() {
-    const nextState = startRunner(cockpitState);
+  function scanLocalAgents() {
+    const nextState = detectPreviewExternalSessions(openPreviewProject(cockpitState));
     const nextConversation = activeConversation(nextState);
 
     setCockpitState(nextState);
     setCockpitUiState((state) => ({
       terminalMode: "runner",
-      runnerEvents: [...state.runnerEvents, runnerPreviewEvent("start", nextConversation)].slice(-25),
+      runnerEvents: [...state.runnerEvents, runnerPreviewEvent("scan", nextConversation)].slice(-25),
     }));
-    setActionFeedback("Started preview runner for the active thread.");
+    setActionFeedback("Scanned local machine for installed and open IA sessions.");
   }
 
   function stopPreviewRunner() {
@@ -221,11 +221,11 @@ export function App() {
             <button
               className="icon-button run"
               type="button"
-              title="Start agent"
-              aria-label="Start agent"
-              onClick={startPreviewRunner}
+              title="Scan local IAs"
+              aria-label="Scan local IAs"
+              onClick={scanLocalAgents}
             >
-              <Play size={18} />
+              <Radar size={18} />
             </button>
             <button
               className="icon-button stop"
@@ -328,7 +328,7 @@ export function App() {
               <code>{currentThreadPath}</code>
               <div className="thread-actions" aria-label="Thread actions">
                 <button type="button" onClick={() => previewThreadAction("resume")}>
-                  <Play size={15} />
+                  <RotateCcw size={15} />
                   Resume
                 </button>
                 <button type="button" onClick={() => previewThreadAction("open-ide")}>

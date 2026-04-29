@@ -43,13 +43,13 @@ describe("cockpit persistence", () => {
   it("persists runner preview UI state separately from project state", () => {
     saveCockpitUiState({
       terminalMode: "raw-jsonl",
-      runnerEvents: ["session_started target=Scaffold setup.jsonl", "session_interrupted target=Scaffold setup.jsonl"],
+      runnerEvents: ["agent_discovery target=Scaffold setup.jsonl", "session_interrupted target=Scaffold setup.jsonl"],
     });
 
-    expect(window.localStorage.getItem(COCKPIT_UI_STORAGE_KEY)).toContain("session_started");
+    expect(window.localStorage.getItem(COCKPIT_UI_STORAGE_KEY)).toContain("agent_discovery");
     expect(loadCockpitUiState()).toEqual({
       terminalMode: "raw-jsonl",
-      runnerEvents: ["session_started target=Scaffold setup.jsonl", "session_interrupted target=Scaffold setup.jsonl"],
+      runnerEvents: ["agent_discovery target=Scaffold setup.jsonl", "session_interrupted target=Scaffold setup.jsonl"],
     });
   });
 

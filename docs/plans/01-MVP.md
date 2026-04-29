@@ -4,7 +4,7 @@
 
 Livrer une version minimale mais utile de ToknIsland pour un developpeur solo.
 
-Le MVP ne cherche pas a tout supporter. Il prouve le coeur du produit : piloter un agent CLI local et garder une trace exploitable.
+Le MVP ne cherche pas a tout supporter. Il prouve le coeur du produit : detecter les IA locales deja installees ou ouvertes, les organiser par projet et garder une trace exploitable.
 
 ## Scope inclus
 
@@ -19,12 +19,17 @@ Le MVP ne cherche pas a tout supporter. Il prouve le coeur du produit : piloter 
 - Afficher les IA configurees ou detectees pour le projet.
 - Afficher plusieurs conversations par IA.
 
-### Runner
+### Discovery locale
 
-- Configurer une commande agent simple.
-- Lancer l'agent dans un PTY.
+- Detecter les commandes IA installees sur le PC local.
 - Detecter automatiquement une IA deja ouverte dans un autre terminal local.
 - Attacher une session externe detectee au projet correspondant.
+- Importer les conversations detectees sans reimport manuel si le projet est deja connu.
+
+### Runner controle
+
+- Configurer une commande agent simple.
+- Lancer l'agent dans un PTY seulement si l'utilisateur choisit explicitement de demarrer une nouvelle session.
 - Afficher la sortie en temps reel.
 - Envoyer une interruption utilisateur.
 - Marquer la session comme terminee, interrompue ou echouee.
@@ -44,7 +49,7 @@ Le MVP ne cherche pas a tout supporter. Il prouve le coeur du produit : piloter 
   - sidebar projets, IA et conversations ;
   - centre session terminal ;
   - panneau details/metadata.
-- Boutons start, stop, resume.
+- Boutons scan local, stop, resume.
 - Statuts visibles : idle, running, stopped, failed.
 
 ### Privacy
@@ -71,11 +76,11 @@ Le MVP ne cherche pas a tout supporter. Il prouve le coeur du produit : piloter 
 - Frontend affiche shell UI.
 - Backend expose une commande healthcheck.
 
-### MVP-2 Runner simple
+### MVP-2 Discovery locale
 
-- Une commande locale peut etre lancee.
-- La sortie apparait dans l'UI.
-- Stop fonctionne.
+- Les IA installees ou ouvertes localement sont detectees.
+- Les sessions detectees apparaissent dans l'UI.
+- Une session detectee peut etre attachee a un projet.
 
 ### MVP-3 Persistence simple
 
@@ -90,4 +95,4 @@ Le MVP ne cherche pas a tout supporter. Il prouve le coeur du produit : piloter 
 
 ## Critere de fin MVP
 
-Depuis un dossier projet, on peut lancer un agent, voir sa sortie, fermer ToknIsland, rouvrir ToknIsland et retrouver la session sauvegardee.
+Depuis un dossier projet, ToknIsland detecte les IA locales et les sessions deja ouvertes, les rattache au projet, affiche les conversations, puis les retrouve apres redemarrage.
