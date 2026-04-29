@@ -67,10 +67,13 @@ export function App() {
         });
 
   function startPreviewRunner() {
-    setCockpitState(startRunner);
+    const nextState = startRunner(cockpitState);
+    const nextConversation = activeConversation(nextState);
+
+    setCockpitState(nextState);
     setCockpitUiState((state) => ({
       terminalMode: "runner",
-      runnerEvents: [...state.runnerEvents, runnerPreviewEvent("start", currentConversation)].slice(-25),
+      runnerEvents: [...state.runnerEvents, runnerPreviewEvent("start", nextConversation)].slice(-25),
     }));
     setActionFeedback("Started preview runner for the active thread.");
   }

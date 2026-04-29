@@ -107,7 +107,7 @@ describe("App", () => {
     await user.click(screen.getByRole("button", { name: "Start agent" }));
 
     expect(screen.getByText(/Project loaded: ToknIsland/)).toBeInTheDocument();
-    expect(screen.getByText(/event: session_started/)).toBeInTheDocument();
+    expect(screen.getByText(/event: session_started target=Scaffold setup.jsonl/)).toBeInTheDocument();
     expect(screen.getByRole("status")).toHaveTextContent("Started preview runner for the active thread.");
     expect(screen.getAllByText("running").length).toBeGreaterThan(0);
 
@@ -144,7 +144,7 @@ describe("App", () => {
     unmount();
     render(<App />);
 
-    expect(screen.getByText(/event: session_started target=pending thread/)).toBeInTheDocument();
+    expect(screen.getByText(/event: session_started target=Scaffold setup.jsonl/)).toBeInTheDocument();
   });
 
   it("detects and attaches an external terminal session", async () => {
