@@ -88,6 +88,9 @@ session_interrupted
 session_failed
 ```
 
+Le frontend possede un module `runnerPreview` qui affiche ces transitions en mode navigateur.
+Il sert de contrat visuel temporaire avant le branchement PTY reel.
+
 ### Risques
 
 - Deadlock si lecture bloquante.

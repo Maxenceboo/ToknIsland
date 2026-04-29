@@ -75,6 +75,7 @@ describe("App", () => {
     await user.click(screen.getByRole("button", { name: "Resume" }));
 
     expect(screen.getAllByText("running").length).toBeGreaterThan(0);
+    expect(screen.getByText(/event: session_resumed target=Unit tests.jsonl/)).toBeInTheDocument();
     expect(screen.getByRole("status")).toHaveTextContent(
       "Would resume Unit tests.jsonl from .toknisland/threads/codex-tests.jsonl",
     );
@@ -102,12 +103,14 @@ describe("App", () => {
     await user.click(screen.getByRole("button", { name: "Start agent" }));
 
     expect(screen.getByText(/Project loaded: ToknIsland/)).toBeInTheDocument();
+    expect(screen.getByText(/event: session_started/)).toBeInTheDocument();
     expect(screen.getByRole("status")).toHaveTextContent("Started preview runner for the active thread.");
     expect(screen.getAllByText("running").length).toBeGreaterThan(0);
 
     await user.click(screen.getByRole("button", { name: "Stop agent" }));
 
     expect(screen.getByRole("status")).toHaveTextContent("Stopped preview runner.");
+    expect(screen.getByText(/event: session_interrupted/)).toBeInTheDocument();
     expect(screen.getAllByText("stopped").length).toBeGreaterThan(0);
   });
 

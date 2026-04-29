@@ -27,6 +27,7 @@ import {
 } from "./cockpitState";
 import { loadCockpitState, saveCockpitState } from "./cockpitPersistence";
 import { previewThreadJsonl, threadActionFeedback, threadJsonlRelativePath } from "./threadActions";
+import { runnerPreviewEvent, runnerPreviewOutput } from "./runnerPreview";
 import { healthcheck, threadIdeTarget, type HealthcheckResponse } from "../lib/tauri";
 
 type TerminalMode = "runner" | "raw-jsonl";
@@ -37,28 +38,42 @@ export function App() {
   const [cockpitState, setCockpitState] = useState(() => detectPreviewExternalSessions(loadCockpitState()));
   const [actionFeedback, setActionFeedback] = useState("Ready for local actions.");
   const [terminalMode, setTerminalMode] = useState<TerminalMode>("runner");
+  const [runnerEvents, setRunnerEvents] = useState<string[]>([]);
 
   const metrics = cockpitMetrics(cockpitState);
   const currentAgent = activeAgent(cockpitState);
   const currentConversation = activeConversation(cockpitState);
   const currentThreadPath = currentConversation ? threadJsonlRelativePath(currentConversation) : null;
+  const backendStatus = health
+    ? `${health.status} (${health.app}, ${health.runtime})`
+    : healthError
+      ? `offline: ${healthError}`
+      : "checking...";
   const terminalOutput =
     terminalMode === "raw-jsonl" && cockpitState.project && currentAgent && currentConversation
       ? previewThreadJsonl(cockpitState.project, currentAgent, currentConversation)
-      : `$ ToknIsland runner
-${cockpitState.project ? `Project loaded: ${cockpitState.project.name}` : "Waiting for a project and agent command."}
-${currentConversation ? `Active conversation: ${currentConversation.title}` : "No active conversation."}
-Backend: ${health ? `${health.status} (${health.app}, ${health.runtime})` : healthError ? `offline: ${healthError}` : "checking..."}`;
+      : runnerPreviewOutput({
+          project: cockpitState.project,
+          agent: currentAgent,
+          conversation: currentConversation,
+          backend: backendStatus,
+          status: cockpitState.runnerStatus,
+          events: runnerEvents,
+        });
 
   function startPreviewRunner() {
     setCockpitState(startRunner);
     setTerminalMode("runner");
+    setRunnerEvents((events) => [...events, runnerPreviewEvent("start", currentConversation)]);
     setActionFeedback("Started preview runner for the active thread.");
   }
 
   function stopPreviewRunner() {
     setCockpitState(stopRunner);
     setTerminalMode("runner");
+    if (cockpitState.runnerStatus === "running") {
+      setRunnerEvents((events) => [...events, runnerPreviewEvent("stop", currentConversation)]);
+    }
     setActionFeedback(
       cockpitState.runnerStatus === "running" ? "Stopped preview runner." : "Runner is already idle.",
     );
@@ -72,6 +87,7 @@ Backend: ${health ? `${health.status} (${health.app}, ${health.runtime})` : heal
     if (action === "resume") {
       setCockpitState(resumeConversation);
       setTerminalMode("runner");
+      setRunnerEvents((events) => [...events, runnerPreviewEvent("resume", currentConversation)]);
       setActionFeedback(threadActionFeedback(action, cockpitState.project, currentConversation));
       return;
     }
