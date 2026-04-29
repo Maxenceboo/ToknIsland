@@ -23,6 +23,7 @@ coverage/
 # Rust / Tauri
 target/
 src-tauri/target/
+src-tauri/gen/
 
 # ToknIsland local runtime data
 .toknisland/
