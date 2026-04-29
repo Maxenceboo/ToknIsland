@@ -48,6 +48,21 @@ describe("App", () => {
     expect(screen.getAllByText("Codex").length).toBeGreaterThan(0);
   });
 
+  it("shows preview feedback for thread actions", async () => {
+    const user = userEvent.setup();
+
+    render(<App />);
+
+    await user.click(screen.getByRole("button", { name: "Import project" }));
+    await user.click(screen.getByRole("button", { name: "Select thread Unit tests.jsonl" }));
+
+    expect(screen.getByLabelText("Thread actions")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "Open in IDE" }));
+
+    expect(screen.getByRole("status")).toHaveTextContent("Would open codex-tests.jsonl in VS Code");
+  });
+
   it("restores imported projects without reimport after reload", async () => {
     const user = userEvent.setup();
 

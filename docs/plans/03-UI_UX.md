@@ -15,6 +15,7 @@ Pas de landing page dans l'app. Le premier ecran doit etre le cockpit utilisable
 - IA affichees comme sous-dossiers.
 - Conversations affichees comme fichiers `thread.jsonl`.
 - Selection d'un fichier thread pour changer la conversation active.
+- Inspecteur de thread avec actions contextuelles : resume, ouvrir dans l'IDE, voir le JSONL brut.
 - Bouton nouveau run.
 
 ### Zone centrale

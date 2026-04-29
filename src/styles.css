@@ -524,6 +524,39 @@ pre {
   white-space: nowrap;
 }
 
+.thread-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.thread-actions button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.045);
+  color: #edf1f5;
+}
+
+.thread-actions button:hover {
+  border-color: rgba(73, 214, 158, 0.28);
+  background: rgba(255, 255, 255, 0.075);
+}
+
+.action-feedback {
+  min-height: 32px;
+  border-radius: 6px;
+  background: rgba(3, 6, 9, 0.34);
+  color: #9ca8b5;
+  padding: 8px;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
 .heatmap {
   display: grid;
   grid-template-columns: repeat(7, 1fr);

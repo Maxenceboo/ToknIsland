@@ -29,6 +29,7 @@ export function App() {
   const [health, setHealth] = useState<HealthcheckResponse | null>(null);
   const [healthError, setHealthError] = useState<string | null>(null);
   const [cockpitState, setCockpitState] = useState(() => detectPreviewExternalSessions(loadCockpitState()));
+  const [actionFeedback, setActionFeedback] = useState("Ready for local actions.");
 
   const metrics = cockpitMetrics(cockpitState);
   const currentAgent = activeAgent(cockpitState);
@@ -226,6 +227,32 @@ Backend: ${health ? `${health.status} (${health.app}, ${health.runtime})` : heal
                 <strong>{currentConversation.tokens}</strong>
               </div>
               <code>.toknisland/threads/{currentConversation.id}.jsonl</code>
+              <div className="thread-actions" aria-label="Thread actions">
+                <button
+                  type="button"
+                  onClick={() => setActionFeedback(`Would resume ${currentConversation.title}.jsonl`)}
+                >
+                  <Play size={15} />
+                  Resume
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActionFeedback(`Would open ${currentConversation.id}.jsonl in VS Code`)}
+                >
+                  <FolderOpen size={15} />
+                  Open in IDE
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActionFeedback(`Would inspect raw JSONL for ${currentConversation.id}`)}
+                >
+                  <FileText size={15} />
+                  Raw JSONL
+                </button>
+              </div>
+              <div className="action-feedback" role="status">
+                {actionFeedback}
+              </div>
             </div>
           ) : (
             <div className="empty-list">No thread selected.</div>
