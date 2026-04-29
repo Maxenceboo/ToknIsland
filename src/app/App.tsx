@@ -29,6 +29,7 @@ import { loadCockpitState, loadCockpitUiState, saveCockpitState, saveCockpitUiSt
 import { previewThreadJsonl, threadActionFeedback, threadJsonlRelativePath } from "./threadActions";
 import { runnerPreviewEvent, runnerPreviewOutput } from "./runnerPreview";
 import { heatmapCells, projectTokenTotal } from "./cockpitAnalytics";
+import { summarizeAgent } from "./agentSummary";
 import { healthcheck, threadIdeTarget, type HealthcheckResponse } from "../lib/tauri";
 
 type TerminalMode = "runner" | "raw-jsonl";
@@ -168,10 +169,12 @@ export function App() {
                   {project.agents.map((agent) => (
                     <div className="tree-agent" key={agent.id}>
                       <div className="tree-node agent-node">
-                        <FolderOpen size={15} />
+                        <span className={`agent-dot ${agent.accent}`} aria-hidden="true" />
                         <span>
                           <strong>{agent.name}</strong>
-                          <small>{agent.conversations.length} thread files</small>
+                          <small>
+                            {summarizeAgent(agent).threadCount} threads | {summarizeAgent(agent).tokenLabel} tokens
+                          </small>
                         </span>
                       </div>
 

@@ -29,6 +29,8 @@ describe("App", () => {
     expect(screen.getByText("C:\\Users\\maxen\\Documents\\ToknIsland")).toBeInTheDocument();
     expect(screen.getByText("Project tree")).toBeInTheDocument();
     expect(screen.getAllByText("Scaffold setup.jsonl").length).toBeGreaterThan(0);
+    expect(screen.getByText("2 threads | 2k tokens")).toBeInTheDocument();
+    expect(screen.getAllByText("1 threads | 0 tokens").length).toBeGreaterThan(0);
     expect(screen.getByText("browser-preview")).toBeInTheDocument();
     expect(screen.getByText(/Project loaded: ToknIsland/)).toBeInTheDocument();
     expect(screen.getByLabelText("Token activity heatmap")).toBeInTheDocument();

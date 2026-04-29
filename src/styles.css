@@ -227,6 +227,10 @@ small,
   color: #cbd6e2;
 }
 
+.agent-node .agent-dot {
+  flex: 0 0 auto;
+}
+
 .thread-node {
   color: #dfe6ee;
 }

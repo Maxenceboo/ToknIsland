@@ -12,7 +12,7 @@ Pas de landing page dans l'app. Le premier ecran doit etre le cockpit utilisable
 
 - Arborescence de projets importes.
 - Projet affiche comme dossier racine.
-- IA affichees comme sous-dossiers.
+- IA affichees comme sous-dossiers avec accent couleur, nombre de threads et total tokens.
 - Conversations affichees comme fichiers `thread.jsonl`.
 - Selection d'un fichier thread pour changer la conversation active.
 - Inspecteur de thread avec actions contextuelles : resume, ouvrir dans l'IDE, voir le JSONL brut.
